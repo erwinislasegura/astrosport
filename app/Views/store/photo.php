@@ -9,20 +9,15 @@ $bibNumber = trim((string)($photo['bib_number'] ?? ''));
 <div class="demo-note product-alert"><?= htmlspecialchars($_SESSION['error']) ?></div>
 <?php unset($_SESSION['error']); endif; ?>
 
-<nav class="crumb editorial-crumb" aria-label="Navegación"><a href="<?= url() ?>">INICIO</a><span>›</span><a href="<?= url('eventos') ?>">EVENTOS</a><span>›</span><b><?= htmlspecialchars($setTitle) ?></b></nav>
-
 <section class="editorial-detail">
  <header class="editorial-set-head">
   <div>
-   <span><?= htmlspecialchars(strtoupper($eventName)) ?></span>
    <h1><?= htmlspecialchars($setTitle) ?></h1>
-   <p><?= $photoCount ?> <?= $photoLabel ?> en alta resolución<?php if ($bibNumber !== ''): ?> · Competidor #<?= htmlspecialchars($bibNumber) ?><?php endif; ?></p>
   </div>
-  <a href="#compra-set">Comprar set completo</a>
  </header>
 
  <div class="editorial-toolbar">
-  <div><b>ARCHIVO FOTOGRÁFICO</b><span>Selecciona las imágenes que quieres comprar</span></div>
+  <p><?= $photoCount ?> <?= $photoLabel ?> en alta resolución<?php if ($bibNumber !== ''): ?> · Competidor #<?= htmlspecialchars($bibNumber) ?><?php endif; ?></p>
   <div class="editorial-view-buttons" aria-label="Cambiar presentación"><button class="active" type="button" data-gallery-view="mosaic" aria-label="Vista mosaico">▦</button><button type="button" data-gallery-view="grid" aria-label="Vista cuadrícula">▦</button></div>
  </div>
 
