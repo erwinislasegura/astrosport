@@ -39,12 +39,12 @@
     <link rel="stylesheet" href="<?= url('assets/astrosport-theme.css') ?>">
     <link rel="stylesheet" href="<?= url('assets/admin-system.css') ?>">
 </head>
-<body>
+<body class="admin-shell admin-section-<?= htmlspecialchars($section ?: 'dashboard') ?>">
     <aside class="sidebar" id="sidebar" aria-label="Navegación del panel">
         <button class="sidebar-close" id="sidebarClose" type="button" aria-label="Cerrar menú">×</button>
         <a class="logo" href="<?= url() ?>">
             <img src="<?= url('assets/astrosport-logo.png') ?>" alt="AstroSport">
-            <span>PANEL ADMIN</span>
+            <span>ADMINISTRACIÓN</span>
         </a>
         <nav>
             <small>GESTIÓN</small>
@@ -80,11 +80,12 @@
         <header class="topbar">
             <div class="topbar-path">
                 <button id="menuBtn" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Abrir menú">☰</button>
-                <span>Panel de control</span>
+                <span>ASTROSPORT WORKSPACE</span>
                 <i>/</i>
                 <b><?= htmlspecialchars($pageTitle ?? 'Resumen') ?></b>
             </div>
             <div class="top-actions">
+                <span class="system-status"><i></i> Sistema activo</span>
                 <a href="<?= url() ?>" target="_blank" rel="noopener">VER TIENDA ↗</a>
             </div>
         </header>
