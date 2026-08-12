@@ -1,6 +1,7 @@
 <?php
 namespace App\Controllers;
 use App\Core\Database;
+use App\Models\Category;
 use App\Models\PhotoPack;
 use App\Models\PhotoSet;
 final class AdminController
@@ -64,6 +65,8 @@ final class AdminController
         $db = Database::db();
         $this->ensureWatermarkControls();
         PhotoSet::ensureFeaturedHomeColumn();
+        Category::ensureSchema();
+        $categories = Category::all(true);
         $events = $db
             ->query("SELECT * FROM events ORDER BY event_date DESC")
             ->fetchAll();
@@ -76,11 +79,12 @@ final class AdminController
         }
         $sets = $db
             ->query(
-                "SELECT ps.*,e.name event_name,COUNT(p.id) photos_count,SUM(p.status='active') published_count,$coverExpr cover_id,MIN(p.price) individual_price,MAX(p.download_enabled) download_enabled FROM photo_sets ps JOIN events e ON e.id=ps.event_id LEFT JOIN photos p ON p.set_id=ps.id GROUP BY ps.id HAVING photos_count>0 ORDER BY ps.id DESC LIMIT 100",
+                "SELECT ps.*,e.name event_name,c.name category_name,COUNT(p.id) photos_count,SUM(p.status='active') published_count,$coverExpr cover_id,MIN(p.price) individual_price,MAX(p.download_enabled) download_enabled FROM photo_sets ps JOIN events e ON e.id=ps.event_id LEFT JOIN categories c ON c.id=ps.category_id LEFT JOIN photos p ON p.set_id=ps.id GROUP BY ps.id HAVING photos_count>0 ORDER BY ps.id DESC LIMIT 100",
             )
             ->fetchAll();
         admin_view("admin/photos", [
             "events" => $events,
+            "categories" => $categories,
             "sets" => $sets,
             "pageTitle" => "Subir fotografías",
             "adminSection" => "photos",
@@ -91,6 +95,8 @@ final class AdminController
         verify_csrf();
         $this->ensureWatermarkControls();
         $event = (int) ($_POST["event_id"] ?? 0);
+        Category::ensureSchema();
+        $categoryId = (int) ($_POST["category_id"] ?? 0);
         $watermark = isset($_POST["watermark"]);
         $wmType =
             ($_POST["watermark_type"] ?? "text") === "image" ? "image" : "text";
@@ -165,10 +171,11 @@ final class AdminController
         $featuredReady = PhotoSet::ensureFeaturedHomeColumn();
         if ($featuredReady) {
             $set = $db->prepare(
-                "INSERT INTO photo_sets(event_id,name,bib_number,individual_enabled,set_enabled,featured_home,pack_enabled,pack_quantity,pack_price,set_price) VALUES(?,?,?,?,?,?,?,?,?,?)",
+                "INSERT INTO photo_sets(event_id,category_id,name,bib_number,individual_enabled,set_enabled,featured_home,pack_enabled,pack_quantity,pack_price,set_price) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
             );
             $set->execute([
                 $event,
+                $categoryId ?: null,
                 $setName,
                 trim($_POST["bib_number"] ?? ""),
                 $individual ? 1 : 0,
@@ -181,10 +188,11 @@ final class AdminController
             ]);
         } else {
             $set = $db->prepare(
-                "INSERT INTO photo_sets(event_id,name,bib_number,individual_enabled,set_enabled,pack_enabled,pack_quantity,pack_price,set_price) VALUES(?,?,?,?,?,?,?,?,?)",
+                "INSERT INTO photo_sets(event_id,category_id,name,bib_number,individual_enabled,set_enabled,pack_enabled,pack_quantity,pack_price,set_price) VALUES(?,?,?,?,?,?,?,?,?,?)",
             );
             $set->execute([
                 $event,
+                $categoryId ?: null,
                 $setName,
                 trim($_POST["bib_number"] ?? ""),
                 $individual ? 1 : 0,
@@ -304,6 +312,7 @@ final class AdminController
         $featuredSelect = PhotoSet::ensureFeaturedHomeColumn()
             ? "COALESCE(ps.featured_home,0) featured_home"
             : "0 featured_home";
+        Category::ensureSchema();
         $coverSelect = "NULL cover_photo_id";
         try {
             $db->query("SELECT cover_photo_id FROM photo_sets LIMIT 0");
@@ -311,7 +320,7 @@ final class AdminController
         } catch (\Throwable $e) {
         }
         $s = $db->prepare(
-            "SELECT p.*,e.name event_name,COALESCE(ps.pack_enabled,0) pack_enabled,ps.pack_quantity,ps.pack_price,COALESCE(ps.status,'active') set_status,ps.name set_name,ps.bib_number set_bib_number,$coverSelect,$featuredSelect,COALESCE(ps.individual_enabled,1) individual_enabled,COALESCE(ps.set_enabled,1) set_enabled,ps.set_price FROM photos p JOIN events e ON e.id=p.event_id LEFT JOIN photo_sets ps ON ps.id=p.set_id WHERE p.id=?",
+            "SELECT p.*,e.name event_name,ps.category_id,COALESCE(ps.pack_enabled,0) pack_enabled,ps.pack_quantity,ps.pack_price,COALESCE(ps.status,'active') set_status,ps.name set_name,ps.bib_number set_bib_number,$coverSelect,$featuredSelect,COALESCE(ps.individual_enabled,1) individual_enabled,COALESCE(ps.set_enabled,1) set_enabled,ps.set_price FROM photos p JOIN events e ON e.id=p.event_id LEFT JOIN photo_sets ps ON ps.id=p.set_id WHERE p.id=?",
         );
         $s->execute([(int) ($_GET["id"] ?? 0)]);
         $photo = $s->fetch();
@@ -322,6 +331,7 @@ final class AdminController
         $events = $db
             ->query("SELECT * FROM events ORDER BY event_date DESC")
             ->fetchAll();
+        $categories = Category::all(true);
         $setPhotos = [];
         if (!empty($photo["set_id"])) {
             $g = $db->prepare(
@@ -334,6 +344,7 @@ final class AdminController
             "photo" => $photo,
             "setPhotos" => $setPhotos,
             "events" => $events,
+            "categories" => $categories,
             "pageTitle" => "Editar fotografía",
             "adminSection" => "photos",
         ]);
@@ -358,6 +369,8 @@ final class AdminController
                 ? "hidden"
                 : "active";
         $event = (int) ($_POST["event_id"] ?? $photo["event_id"]);
+        Category::ensureSchema();
+        $categoryId = (int) ($_POST["category_id"] ?? 0);
         $setName = trim($_POST["set_name"] ?? "");
         $bib = trim($_POST["bib_number"] ?? "");
         $price = max(0, (int) ($_POST["price"] ?? $photo["price"]));
@@ -559,9 +572,10 @@ final class AdminController
             PhotoPack::saveOptions((int) $photo["set_id"], $packOptions);
             if ($featuredReady) {
                 $db->prepare(
-                    "UPDATE photo_sets SET event_id=?,name=?,bib_number=?,individual_enabled=?,set_enabled=?,featured_home=?,set_price=?,pack_enabled=?,pack_quantity=?,pack_price=?,status=? WHERE id=?",
+                    "UPDATE photo_sets SET event_id=?,category_id=?,name=?,bib_number=?,individual_enabled=?,set_enabled=?,featured_home=?,set_price=?,pack_enabled=?,pack_quantity=?,pack_price=?,status=? WHERE id=?",
                 )->execute([
                     $event,
+                    $categoryId ?: null,
                     $setName,
                     $bib,
                     $individual ? 1 : 0,
@@ -576,9 +590,10 @@ final class AdminController
                 ]);
             } else {
                 $db->prepare(
-                    "UPDATE photo_sets SET event_id=?,name=?,bib_number=?,individual_enabled=?,set_enabled=?,set_price=?,pack_enabled=?,pack_quantity=?,pack_price=?,status=? WHERE id=?",
+                    "UPDATE photo_sets SET event_id=?,category_id=?,name=?,bib_number=?,individual_enabled=?,set_enabled=?,set_price=?,pack_enabled=?,pack_quantity=?,pack_price=?,status=? WHERE id=?",
                 )->execute([
                     $event,
+                    $categoryId ?: null,
                     $setName,
                     $bib,
                     $individual ? 1 : 0,

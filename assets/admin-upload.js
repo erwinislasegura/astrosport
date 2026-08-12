@@ -186,3 +186,17 @@ document
   .forEach((r) => r.addEventListener("change", watermarkFields));
 watermarkFields();
 render();
+
+// Categoría asignada al set completo.
+const eventSelect = document.querySelector('select[name="event_id"]');
+if (eventSelect && Array.isArray(window.astroCategories)) {
+  const label = document.createElement('label');
+  label.textContent = 'CATEGORÍA';
+  const select = document.createElement('select');
+  select.name = 'category_id';
+  select.required = true;
+  select.innerHTML = '<option value="">Seleccionar categoría</option>' + window.astroCategories.map(category => `<option value="${category.id}">${category.name}</option>`).join('');
+  select.value = String(window.astroSelectedCategory || '');
+  label.appendChild(select);
+  eventSelect.closest('label')?.after(label);
+}

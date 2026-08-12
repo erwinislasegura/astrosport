@@ -2,6 +2,7 @@
 namespace App\Controllers;
 
 use App\Core\Database;
+use App\Models\Category;
 use App\Models\Event;
 use App\Models\Photo;
 use App\Models\PhotoSet;
@@ -12,6 +13,8 @@ final class StoreController
     public function index(): void
     {
         $db = Database::db();
+        Category::ensureSchema();
+        $categories = Category::all(true);
         $cta = $db->query("SELECT * FROM homepage_cta WHERE id=1 AND active=1")->fetch() ?: null;
         $hero = null;
         try {
@@ -30,15 +33,21 @@ final class StoreController
             GROUP BY ps.id ORDER BY ps.id DESC")->fetchAll();
 
         $query = trim($_GET['q'] ?? '');
-        $catalogSql = "SELECT ps.*,e.name event_name,COUNT(p.id) photos_count,$coverExpression cover_id,MIN(p.preview_path) preview_path,MIN(p.price) individual_price
+        $catalogSql = "SELECT ps.*,e.name event_name,c.name category_name,c.slug category_slug,COUNT(p.id) photos_count,$coverExpression cover_id,MIN(p.preview_path) preview_path,MIN(p.price) individual_price
             FROM photo_sets ps
             JOIN events e ON e.id=ps.event_id
+            LEFT JOIN categories c ON c.id=ps.category_id
             JOIN photos p ON p.set_id=ps.id
             WHERE ps.status='active' AND e.status='published'";
         $catalogArgs = [];
         if ($query !== '') {
             $catalogSql .= ' AND (ps.bib_number LIKE ? OR ps.name LIKE ? OR e.name LIKE ?)';
             $catalogArgs = ["%$query%", "%$query%", "%$query%"];
+        }
+        $categorySlug = trim($_GET['category'] ?? '');
+        if ($categorySlug !== '') {
+            $catalogSql .= ' AND c.slug=?';
+            $catalogArgs[] = $categorySlug;
         }
         $catalogSql .= ' GROUP BY ps.id ORDER BY ps.id DESC';
         $catalogQuery = $db->prepare($catalogSql);
@@ -58,7 +67,7 @@ final class StoreController
         }
 
         $bodyClass = 'home-page';
-        view('store/index', compact('events', 'sets', 'catalogSets', 'setPreviews', 'cta', 'hero', 'bodyClass'));
+        view('store/index', compact('events', 'categories', 'categorySlug', 'sets', 'catalogSets', 'setPreviews', 'cta', 'hero', 'bodyClass'));
     }
 
     public function heroImage(): never
@@ -138,6 +147,7 @@ final class StoreController
 
     public function photo(): void
     {
+        Category::ensureSchema();
         $photo = Photo::find((int)($_GET['id'] ?? 0));
         if (!$photo) {
             http_response_code(404);

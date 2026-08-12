@@ -19,6 +19,9 @@
     <?php if ($section === 'events'): ?>
         <link rel="stylesheet" href="<?= url('assets/admin-events.css') ?>">
     <?php endif; ?>
+    <?php if ($section === 'categories'): ?>
+        <link rel="stylesheet" href="<?= url('assets/admin-categories.css') ?>">
+    <?php endif; ?>
     <?php if (in_array($section, ['flow', 'email'], true)): ?>
         <link rel="stylesheet" href="<?= url('assets/admin-flow.css') ?>">
     <?php endif; ?>
@@ -47,6 +50,7 @@
             <small>GESTIÓN</small>
             <a class="<?= $section === 'dashboard' ? 'active' : '' ?>" href="<?= url('admin') ?>"><i>▦</i> Resumen</a>
             <a class="<?= $section === 'events' ? 'active' : '' ?>" href="<?= url('admin/eventos') ?>"><i>◫</i> Eventos</a>
+            <a class="<?= $section === 'categories' ? 'active' : '' ?>" href="<?= url('admin/categorias') ?>"><i>≡</i> Categorías</a>
             <a class="<?= $section === 'photos' ? 'active' : '' ?>" href="<?= url('admin/fotos') ?>"><i>↑</i> Subir fotografías</a>
             <a href="#"><i>▧</i> Galerías</a>
             <a class="<?= $section === 'orders' ? 'active' : '' ?>" href="<?= url('admin/pedidos') ?>"><i>◇</i> Pedidos</a>
@@ -99,6 +103,8 @@
                 'scale' => (int)($photo['watermark_scale'] ?? 90),
                 'opacity' => (int)($photo['watermark_opacity'] ?? 65),
             ], JSON_UNESCAPED_SLASHES) ?>;
+            window.astroCategories = <?= json_encode($categories ?? [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
+            window.astroSelectedCategory = <?= (int)($photo['category_id'] ?? 0) ?>;
         </script>
         <script src="<?= url('assets/admin-upload.js') ?>"></script>
     <?php endif; ?>

@@ -1,5 +1,7 @@
 <?php
 $packOptions=!empty($photo['set_id'])?\App\Models\PhotoPack::forSet((int)$photo['set_id']):[];
+$similarUrl=!empty($photo['category_slug'])?url('?category='.rawurlencode($photo['category_slug']).'#fotos'):url('#fotos');
+$editorialDate=!empty($photo['event_date'])?date('d/m/Y',strtotime($photo['event_date'])):'';
 if(!empty($photo['set_id'])&&(!empty($photo['individual_enabled'])||$packOptions)):
 ?>
 <form class="smart-photo-selection" method="post" action="<?=url('carrito/agregar-seleccion')?>" data-individual-enabled="<?=!empty($photo['individual_enabled'])?'1':'0'?>">
@@ -50,7 +52,7 @@ if(!empty($photo['set_id'])&&(!empty($photo['individual_enabled'])||$packOptions
          data-photo-index="<?=$n+1?>"
          tabindex="0">
    <input type="checkbox" name="ids[]" value="<?=$r['id']?>" data-price="<?=$r['price']?>" <?=((int)$r['id']===(int)$photo['id'])?'checked':''?>>
-   <span><img src="<?=preview_url($r)?>" alt="<?=htmlspecialchars($r['title'])?>"><i>✓</i></span>
+   <span class="editorial-photo-frame"><img src="<?=preview_url($r)?>" alt="<?=htmlspecialchars($r['title'])?>"><i>✓</i><span class="editorial-photo-meta"><b><?=htmlspecialchars($photo['set_name']?:$r['title'])?></b><small><?=htmlspecialchars($photo['category_name']?:$photo['event_name'])?><?=$editorialDate?' · '.$editorialDate:''?></small></span><span class="editorial-photo-actions"><a href="<?=$similarUrl?>">Imágenes similares</a><button type="button" data-save-photo="<?=$r['id']?>" aria-label="Guardar fotografía">＋ Guardar</button><button type="button" data-cart-photo aria-label="Agregar al carrito">🛒</button></span></span>
    <small><?=htmlspecialchars($r['title'])?></small>
    <b><?=money((int)$r['price'])?></b>
   </label>

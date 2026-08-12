@@ -104,4 +104,23 @@
   }));
   update();
  });
+
+ const savedKey='astrosport_saved_photos';
+ let saved=[];
+ try{saved=JSON.parse(localStorage.getItem(savedKey)||'[]').map(String);}catch(error){saved=[];}
+ document.querySelectorAll('[data-save-photo]').forEach(button=>{
+  const id=String(button.dataset.savePhoto);
+  const render=()=>{const active=saved.includes(id);button.classList.toggle('saved',active);button.textContent=active?'✓ Guardada':'＋ Guardar';};
+  render();
+  button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();saved=saved.includes(id)?saved.filter(item=>item!==id):[...saved,id];try{localStorage.setItem(savedKey,JSON.stringify(saved));}catch(error){}render();});
+ });
+ document.querySelectorAll('[data-cart-photo]').forEach(button=>{
+  const label=button.closest('.photo-choice');
+  const checkbox=label?.querySelector('input[type="checkbox"]');
+  const render=()=>button.classList.toggle('selected',Boolean(checkbox?.checked));
+  render();
+  button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();if(!checkbox)return;checkbox.checked=!checkbox.checked;checkbox.dispatchEvent(new Event('change',{bubbles:true}));render();});
+  checkbox?.addEventListener('change',render);
+ });
+ document.querySelectorAll('.editorial-photo-actions a').forEach(link=>link.addEventListener('click',event=>event.stopPropagation()));
 })();

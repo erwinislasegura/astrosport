@@ -1,0 +1,6 @@
+.category-admin-grid{display:grid;grid-template-columns:minmax(280px,.36fr) minmax(0,1fr);gap:20px}
+.category-form{align-self:start;display:grid;gap:16px}
+.category-form label{display:grid;gap:7px;font-size:9px;font-weight:800}
+.category-form input,.category-form select{width:100%;padding:13px;border:1px solid #d8dddf;background:#fff}
+.category-form button{width:100%}
+@media(max-width:900px){.category-admin-grid{grid-template-columns:1fr}}
