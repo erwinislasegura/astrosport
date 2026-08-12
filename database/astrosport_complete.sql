@@ -47,7 +47,26 @@ INSERT INTO events(name,slug,sport,event_date,location) VALUES
 ('Liga Urbana','liga-urbana','Fútbol','2026-07-26','Concepción'),
 ('Desafío Cordillerano','desafio-cordillerano','Ciclismo','2026-07-19','Biobío');
 INSERT INTO photo_sets(event_id,name,bib_number,individual_enabled,set_enabled,set_price) VALUES
-(1,'Set Trail · Competidor 184','184',1,1,19990),(2,'Set Liga Urbana · Jornada Final',NULL,1,1,24990),(3,'Set Desafío Cordillerano',NULL,1,1,21990);
+(1,'Set Trail · Competidor 184','184',1,1,19990),
+(2,'Set Liga Urbana · Jornada Final',NULL,1,1,24990),
+(3,'Set Desafío Cordillerano',NULL,1,1,21990),
+(1,'Set Trail · Competidor 214','214',1,1,12990),
+(1,'Set Trail · Competidor 415','415',1,1,12990),
+(1,'Set Trail · Competidor 340','340',1,1,12990),
+(1,'Set Trail · Competidor 73','73',1,1,12990),
+(1,'Set Trail · Salida oficial','101',1,1,14990),
+(1,'Set Trail · Cruce del bosque','126',1,1,14990),
+(1,'Set Trail · Ascenso cordillerano','157',1,1,14990),
+(1,'Set Trail · Paso de montaña','205',1,1,14990),
+(1,'Set Trail · Esfuerzo final','288',1,1,14990),
+(1,'Set Trail · Últimos metros','319',1,1,14990),
+(1,'Set Trail · Llegada oficial','401',1,1,14990),
+(2,'Set Liga Urbana · Competidor 128','128',1,1,12990),
+(2,'Set Liga Urbana · Competidor 96','96',1,1,12990),
+(2,'Set Liga Urbana · Competidor 57','57',1,1,12990),
+(2,'Set Liga Urbana · Ataque y definición','24',1,1,16990),
+(2,'Set Liga Urbana · Juego colectivo','18',1,1,16990),
+(3,'Set Desafío · Competidor 302','302',1,1,18990);
 INSERT INTO photos(event_id,title,bib_number,price,original_path,preview_path,file_size) VALUES
 (1,'Sprint en la cumbre','184',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=900&q=85',5242880),
 (1,'Equipo en ruta','214',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1540539234-c14a20fb7c7b?auto=format&fit=crop&w=900&q=85',4980736),
@@ -81,9 +100,16 @@ INSERT INTO photos(event_id,title,bib_number,price,original_path,preview_path,fi
 (3,'Ataque en subida','302',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=900&q=85',6120000),
 (3,'Paso por el valle','302',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1541625602330-2277a4c46182?auto=format&fit=crop&w=900&q=85&sat=-8',6450000),
 (3,'Sprint de llegada','302',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1530137073520-4ea6e2f10a48?auto=format&fit=crop&w=900&q=85',6220000);
-UPDATE photos SET set_id=1 WHERE event_id=1;
-UPDATE photos SET set_id=2 WHERE event_id=2;
-UPDATE photos SET set_id=3 WHERE event_id=3;
+UPDATE photos SET set_id=CASE id
+ WHEN 1 THEN 1 WHEN 2 THEN 4 WHEN 3 THEN 2 WHEN 4 THEN 3
+ WHEN 5 THEN 5 WHEN 6 THEN 15 WHEN 7 THEN 20 WHEN 8 THEN 6
+ WHEN 9 THEN 16 WHEN 10 THEN 20 WHEN 11 THEN 7 WHEN 12 THEN 17
+ WHEN 13 THEN 8 WHEN 14 THEN 9 WHEN 15 THEN 10 WHEN 16 THEN 11
+ WHEN 17 THEN 12 WHEN 18 THEN 13 WHEN 19 THEN 14 WHEN 20 THEN 18
+ WHEN 21 THEN 18 WHEN 22 THEN 18 WHEN 23 THEN 19 WHEN 24 THEN 19
+ WHEN 25 THEN 2 WHEN 26 THEN 2 WHEN 27 THEN 20 WHEN 28 THEN 20
+ WHEN 29 THEN 3 WHEN 30 THEN 3 WHEN 31 THEN 3 WHEN 32 THEN 20
+ ELSE set_id END;
 UPDATE photo_sets ps SET cover_photo_id=(SELECT MIN(p.id) FROM photos p WHERE p.set_id=ps.id);
 UPDATE photo_sets SET featured_home=1;
 INSERT INTO event_catalog(event_id,cover_path,description) VALUES
@@ -91,10 +117,12 @@ INSERT INTO event_catalog(event_id,cover_path,description) VALUES
 (2,'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1400&q=88','Fotografías de la jornada final de Liga Urbana.'),
 (3,'https://images.unsplash.com/photo-1541625602330-2277a4c46182?auto=format&fit=crop&w=1400&q=88','Galería oficial del Desafío Cordillerano.');
 INSERT INTO event_sets(event_id,set_id,position) SELECT event_id,id,id FROM photo_sets;
-INSERT INTO photo_pack_options(set_id,slot,quantity,price,active) VALUES
-(1,1,3,11990,1),(1,2,5,16990,1),(1,3,10,27990,1),
-(2,1,3,11990,1),(2,2,5,16990,1),(2,3,10,27990,1),
-(3,1,3,11990,1),(3,2,5,16990,1),(3,3,10,27990,1);
+INSERT INTO photo_pack_options(set_id,slot,quantity,price,active)
+SELECT id,1,3,11990,1 FROM photo_sets;
+INSERT INTO photo_pack_options(set_id,slot,quantity,price,active)
+SELECT id,2,5,16990,1 FROM photo_sets;
+INSERT INTO photo_pack_options(set_id,slot,quantity,price,active)
+SELECT id,3,10,27990,1 FROM photo_sets;
 INSERT INTO orders(customer_name,customer_email,total,status,download_token,paid_at) VALUES
 ('Camila Soto','camila@example.com',9980,'paid','demo00000000000000000000000000000000000000000001',DATE_SUB(NOW(),INTERVAL 6 DAY)),
 ('Matías Rojas','matias@example.com',4990,'paid','demo00000000000000000000000000000000000000000002',DATE_SUB(NOW(),INTERVAL 3 DAY)),
