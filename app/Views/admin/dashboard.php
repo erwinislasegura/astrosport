@@ -1,2 +1,124 @@
-<div class="content"><section class="title"><div><span class="eyebrow">VISIÓN GENERAL</span><h1>RESUMEN DE <em>VENTAS.</em></h1><p>Hola, Erwin. Este es el rendimiento de AstroSport.</p></div><div class="date-filter"><span>PERIODO</span><button>ÚLTIMOS 14 DÍAS⌄</button></div></section><section class="kpis"><article><div class="kpi-top"><span>INGRESOS TOTALES</span><i>$</i></div><strong><?=money($stats['sales'])?></strong><p><b>↑ EN LÍNEA</b> pedidos pagados</p><div class="spark"><?php foreach([30,42,36,58,50,78,100] as $h):?><span style="height:<?=$h?>%"></span><?php endforeach;?></div></article><article><div class="kpi-top"><span>PEDIDOS COMPLETADOS</span><i>◇</i></div><strong><?=$stats['orders']?></strong><p><b>TIENDA ACTIVA</b> ventas registradas</p><div class="kpi-foot"><span>Pagados <b><?=$stats['orders']?></b></span><span>Pendientes <b><?=$stats['pending']?></b></span></div></article><article><div class="kpi-top"><span>FOTOGRAFÍAS VENDIDAS</span><i>▧</i></div><strong><?=$stats['sold']?></strong><p><b>CATÁLOGO</b> <?=$stats['photos']?> publicadas</p><div class="kpi-foot"><span>Disponibles <b><?=$stats['photos']?></b></span><span>Vendidas <b><?=$stats['sold']?></b></span></div></article><article><div class="kpi-top"><span>TICKET PROMEDIO</span><i>↗</i></div><strong><?=money($stats['average'])?></strong><p><b>POR PEDIDO</b> promedio pagado</p><div class="goal"><span><i style="width:<?=min(100,(int)($stats['average']/100))?>%"></i></span><small>Meta sugerida: $10.000</small></div></article></section><section class="main-grid"><article class="panel sales-panel"><div class="panel-head"><div><span class="eyebrow">RENDIMIENTO</span><h2>VENTAS POR <em id="chartPeriod">DÍA</em></h2></div><div class="tabs"><button class="active" data-period="day">14 DÍAS</button></div></div><div class="chart-summary"><div><small>VENTAS DEL PERIODO</small><strong><?=money($stats['sales'])?></strong></div><span><i></i> Ingresos</span></div><div class="chart-wrap"><div class="axis"><span>$150k</span><span>$100k</span><span>$50k</span><span>$0</span></div><svg viewBox="0 0 700 230" preserveAspectRatio="none"><defs><linearGradient id="area" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#baff18" stop-opacity=".3"/><stop offset="1" stop-color="#baff18" stop-opacity="0"/></linearGradient></defs><g class="grid-lines"><line x1="0" y1="20" x2="700" y2="20"/><line x1="0" y1="83" x2="700" y2="83"/><line x1="0" y1="146" x2="700" y2="146"/><line x1="0" y1="210" x2="700" y2="210"/></g><?php $max=max([1,...array_column($daily,'total')]);$pts=[];$labels=[];foreach($daily as $i=>$d){$x=count($daily)>1?$i*(700/(count($daily)-1)):350;$y=210-((int)$d['total']/$max*180);$pts[]="$x,$y";$labels[]=date('d/m',strtotime($d['day']));}?><polyline fill="none" stroke="#9ed916" stroke-width="3" points="<?=implode(' ',$pts)?>"/></svg><div class="chart-labels"><?php foreach($labels as $l):?><span><?=$l?></span><?php endforeach;?></div></div></article><article class="panel storage"><div class="panel-head"><div><span class="eyebrow">RECURSOS</span><h2>USO DE <em>MEMORIA</em></h2></div><a href="<?=url('admin/fotos')?>">GESTIONAR</a></div><?php $usedGb=$stats['storage']/1073741824;$percent=min(100,round($usedGb/50*100));?><div class="storage-ring"><svg viewBox="0 0 140 140"><circle cx="70" cy="70" r="56"/><circle class="used-ring" cx="70" cy="70" r="56" style="stroke-dashoffset:<?=352-(352*$percent/100)?>"/></svg><div><strong><?=$percent?>%</strong><span>UTILIZADO</span></div></div><div class="storage-total"><strong><?=number_format($usedGb,2,',','.')?> GB</strong><span>de 50 GB disponibles</span></div><div class="storage-list"><div><i class="lime"></i><span>Originales y vistas previas</span><b><?=number_format($usedGb,2,',','.')?> GB</b></div></div><div class="storage-alert"><b><?=number_format(max(0,50-$usedGb),1,',','.')?> GB LIBRES</b><span>Almacenamiento disponible</span></div></article></section><section class="lower-grid"><article class="panel events"><div class="panel-head"><div><span class="eyebrow">MÁS RENTABLES</span><h2>VENTAS POR EVENTO</h2></div></div><?php foreach($topEvents as $i=>$e):?><div class="event-row"><span class="rank"><?=str_pad((string)($i+1),2,'0',STR_PAD_LEFT)?></span><img src="<?=preview_url($e)?>" alt=""><div><b><?=htmlspecialchars($e['name'])?></b><small><?=date('d M Y',strtotime($e['event_date']))?> · <?=htmlspecialchars($e['sport'])?></small></div><span class="event-sales"><b><?=money((int)$e['sales'])?></b><small><?=$e['orders_count']?> pedidos</small></span><div class="event-bar"><i style="width:<?=min(100,(int)($e['sales']/max(1,$stats['sales'])*100))?>%"></i></div></div><?php endforeach;?></article><article class="panel recent"><div class="panel-head"><div><span class="eyebrow">ACTIVIDAD</span><h2>PEDIDOS RECIENTES</h2></div></div><div class="table-wrap"><table><thead><tr><th>PEDIDO</th><th>CLIENTE</th><th>PRODUCTO</th><th>TOTAL</th><th>ESTADO</th></tr></thead><tbody><?php foreach($recent as $o):?><tr><td><b>#AST-<?=str_pad((string)$o['id'],4,'0',STR_PAD_LEFT)?></b><small><?=date('d/m H:i',strtotime($o['created_at']))?></small></td><td><?=htmlspecialchars($o['customer_name'])?></td><td><?=$o['items']?> fotografía(s)</td><td><b><?=money((int)$o['total'])?></b></td><td><span class="status <?=$o['status']==='paid'?'paid':'pending'?>"><?=strtoupper($o['status'])?></span></td></tr><?php endforeach;?></tbody></table></div></article></section><section class="quick"><div><span class="eyebrow">ACCIONES RÁPIDAS</span><h2>¿QUÉ QUIERES HACER?</h2></div><a href="<?=url('admin/fotos')?>"><i>↑</i><span><b>SUBIR FOTOGRAFÍAS</b><small>Crea un nuevo lote</small></span><strong>→</strong></a><a href="<?=url('admin/usuarios')?>"><i>◎</i><span><b>USUARIOS Y ROLES</b><small>Administra el equipo</small></span><strong>→</strong></a></section></div>
+<?php
+$usedGb = $stats['storage'] / 1073741824;
+$storagePercent = min(100, round($usedGb / 50 * 100));
+$maxDaily = max([1, ...array_column($daily, 'total')]);
+$chartPoints = [];
+$chartLabels = [];
+foreach ($daily as $index => $day) {
+    $x = count($daily) > 1 ? $index * (700 / (count($daily) - 1)) : 350;
+    $y = 180 - ((int)$day['total'] / $maxDaily * 150);
+    $chartPoints[] = $x . ',' . $y;
+    $chartLabels[] = date('d/m', strtotime($day['day']));
+}
+?>
 
+<div class="content dashboard-workspace">
+    <section class="title dashboard-title">
+        <div>
+            <span class="eyebrow">CENTRO DE OPERACIONES</span>
+            <h1>Resumen del negocio</h1>
+            <p>Ventas, catálogo y actividad reciente de AstroSport en una sola vista.</p>
+        </div>
+        <div class="dashboard-title-actions">
+            <span><?= date('d/m/Y') ?></span>
+            <a class="btn btn-primary" href="<?= url('admin/fotos') ?>">+ NUEVO SET</a>
+        </div>
+    </section>
+
+    <section class="dashboard-metrics">
+        <article>
+            <div><span>INGRESOS PAGADOS</span><i>$</i></div>
+            <strong><?= money($stats['sales']) ?></strong>
+            <small><?= $stats['orders'] ?> pedidos completados</small>
+        </article>
+        <article>
+            <div><span>PEDIDOS</span><i>01</i></div>
+            <strong><?= $stats['orders'] ?></strong>
+            <small><b><?= $stats['pending'] ?></b> pendientes de gestión</small>
+        </article>
+        <article>
+            <div><span>FOTOS VENDIDAS</span><i>02</i></div>
+            <strong><?= $stats['sold'] ?></strong>
+            <small><?= $stats['photos'] ?> fotografías disponibles</small>
+        </article>
+        <article>
+            <div><span>TICKET PROMEDIO</span><i>03</i></div>
+            <strong><?= money($stats['average']) ?></strong>
+            <small>Valor promedio por pedido</small>
+        </article>
+    </section>
+
+    <section class="dashboard-primary-grid">
+        <article class="panel dashboard-sales-card">
+            <div class="dashboard-card-head">
+                <div><span class="eyebrow">RENDIMIENTO</span><h2>Ingresos recientes</h2><p>Comportamiento diario de las ventas pagadas.</p></div>
+                <div class="dashboard-total"><small>TOTAL REGISTRADO</small><strong><?= money($stats['sales']) ?></strong></div>
+            </div>
+            <div class="dashboard-chart">
+                <div class="dashboard-axis"><span><?= money((int)$maxDaily) ?></span><span><?= money((int)($maxDaily / 2)) ?></span><span>$0</span></div>
+                <div class="dashboard-plot">
+                    <svg viewBox="0 0 700 190" preserveAspectRatio="none" role="img" aria-label="Ingresos diarios">
+                        <g class="dashboard-grid-lines"><line x1="0" y1="30" x2="700" y2="30"/><line x1="0" y1="105" x2="700" y2="105"/><line x1="0" y1="180" x2="700" y2="180"/></g>
+                        <?php if ($chartPoints): ?><polyline points="<?= implode(' ', $chartPoints) ?>"/><?php endif; ?>
+                    </svg>
+                    <div class="dashboard-chart-labels"><?php foreach ($chartLabels as $label): ?><span><?= $label ?></span><?php endforeach; ?></div>
+                </div>
+            </div>
+        </article>
+
+        <aside class="dashboard-side-stack">
+            <article class="panel dashboard-status-card">
+                <div class="dashboard-card-head compact"><div><span class="eyebrow">ESTADO</span><h2>Operación</h2></div><span class="operation-live"><i></i> ACTIVA</span></div>
+                <div class="operation-row"><span>Pedidos pendientes</span><strong><?= $stats['pending'] ?></strong></div>
+                <div class="operation-row"><span>Fotografías publicadas</span><strong><?= $stats['photos'] ?></strong></div>
+                <div class="operation-row"><span>Almacenamiento</span><strong><?= number_format($usedGb, 2, ',', '.') ?> GB</strong></div>
+                <div class="storage-progress"><i style="width:<?= $storagePercent ?>%"></i></div>
+                <small><?= number_format(max(0, 50 - $usedGb), 1, ',', '.') ?> GB disponibles de 50 GB</small>
+            </article>
+            <article class="panel dashboard-actions-card">
+                <div class="dashboard-card-head compact"><div><span class="eyebrow">ATAJOS</span><h2>Acciones rápidas</h2></div></div>
+                <a href="<?= url('admin/fotos') ?>"><span><b>Subir fotografías</b><small>Crear y publicar un nuevo set</small></span><strong>→</strong></a>
+                <a href="<?= url('admin/eventos') ?>"><span><b>Gestionar eventos</b><small>Editar fechas y coberturas</small></span><strong>→</strong></a>
+                <a href="<?= url('admin/pedidos') ?>"><span><b>Revisar pedidos</b><small>Consultar ventas y estados</small></span><strong>→</strong></a>
+            </article>
+        </aside>
+    </section>
+
+    <section class="dashboard-secondary-grid">
+        <article class="panel dashboard-events-card">
+            <div class="dashboard-card-head"><div><span class="eyebrow">RENDIMIENTO</span><h2>Eventos con más ventas</h2></div><a href="<?= url('admin/eventos') ?>">VER EVENTOS →</a></div>
+            <div class="dashboard-event-list">
+                <?php if (!$topEvents): ?><p class="dashboard-empty">Aún no existen ventas asociadas a eventos.</p><?php endif; ?>
+                <?php foreach ($topEvents as $index => $event): ?>
+                    <article>
+                        <span class="event-position"><?= str_pad((string)($index + 1), 2, '0', STR_PAD_LEFT) ?></span>
+                        <img src="<?= preview_url($event) ?>" alt="">
+                        <div><b><?= htmlspecialchars($event['name']) ?></b><small><?= date('d/m/Y', strtotime($event['event_date'])) ?> · <?= htmlspecialchars($event['sport']) ?></small></div>
+                        <span class="event-result"><b><?= money((int)$event['sales']) ?></b><small><?= $event['orders_count'] ?> pedidos</small></span>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+        </article>
+
+        <article class="panel dashboard-orders-card">
+            <div class="dashboard-card-head"><div><span class="eyebrow">ACTIVIDAD</span><h2>Pedidos recientes</h2></div><a href="<?= url('admin/pedidos') ?>">VER PEDIDOS →</a></div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>PEDIDO</th><th>CLIENTE</th><th>CONTENIDO</th><th>TOTAL</th><th>ESTADO</th></tr></thead>
+                    <tbody>
+                        <?php if (!$recent): ?><tr><td colspan="5" class="dashboard-empty">Todavía no existen pedidos registrados.</td></tr><?php endif; ?>
+                        <?php foreach ($recent as $order): ?>
+                            <tr>
+                                <td><b>#AST-<?= str_pad((string)$order['id'], 4, '0', STR_PAD_LEFT) ?></b><small><?= date('d/m H:i', strtotime($order['created_at'])) ?></small></td>
+                                <td><?= htmlspecialchars($order['customer_name']) ?></td>
+                                <td><?= $order['items'] ?> fotografía(s)</td>
+                                <td><b><?= money((int)$order['total']) ?></b></td>
+                                <td><span class="status <?= $order['status'] === 'paid' ? 'paid' : 'pending' ?>"><?= $order['status'] === 'paid' ? 'PAGADO' : 'PENDIENTE' ?></span></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </article>
+    </section>
+</div>
