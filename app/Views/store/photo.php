@@ -1,10 +1,23 @@
-<?php if(!empty($_SESSION['error'])):?><div class="demo-note product-alert"><?=htmlspecialchars($_SESSION['error']);unset($_SESSION['error']);?></div><?php endif;?>
+<?php
+$setTitle = (string)($photo['set_name'] ?: $photo['title']);
+$eventName = (string)$photo['event_name'];
+$photoCount = count($related);
+$photoLabel = $photoCount === 1 ? 'fotografía' : 'fotografías';
+$bibNumber = trim((string)($photo['bib_number'] ?? ''));
+?>
+<?php if (!empty($_SESSION['error'])): ?>
+<div class="demo-note product-alert"><?= htmlspecialchars($_SESSION['error']) ?></div>
+<?php unset($_SESSION['error']); endif; ?>
 
-<nav class="crumb editorial-crumb" aria-label="Navegación"><a href="<?=url()?>">INICIO</a><span>›</span><a href="<?=url('eventos')?>">EVENTOS</a><span>›</span><b><?=htmlspecialchars($photo['set_name']?:$photo['title'])?></b></nav>
+<nav class="crumb editorial-crumb" aria-label="Navegación"><a href="<?= url() ?>">INICIO</a><span>›</span><a href="<?= url('eventos') ?>">EVENTOS</a><span>›</span><b><?= htmlspecialchars($setTitle) ?></b></nav>
 
 <section class="editorial-detail">
  <header class="editorial-set-head">
-  <div><span><?=htmlspecialchars(strtoupper($photo['event_name']))?></span><h1><?=htmlspecialchars($photo['set_name']?:$photo['title'])?></h1><p><?=count($related)?> <?=count($related)===1?'fotografía':'fotografías')?> en alta resolución<?php if($photo['bib_number']!==null&&$photo['bib_number']!==''):?> · Competidor #<?=htmlspecialchars($photo['bib_number'])?><?php endif;?></p></div>
+  <div>
+   <span><?= htmlspecialchars(strtoupper($eventName)) ?></span>
+   <h1><?= htmlspecialchars($setTitle) ?></h1>
+   <p><?= $photoCount ?> <?= $photoLabel ?> en alta resolución<?php if ($bibNumber !== ''): ?> · Competidor #<?= htmlspecialchars($bibNumber) ?><?php endif; ?></p>
+  </div>
   <a href="#compra-set">Comprar set completo</a>
  </header>
 
