@@ -110,6 +110,13 @@ UPDATE photos SET set_id=CASE id
  WHEN 25 THEN 2 WHEN 26 THEN 2 WHEN 27 THEN 20 WHEN 28 THEN 20
  WHEN 29 THEN 3 WHEN 30 THEN 3 WHEN 31 THEN 3 WHEN 32 THEN 20
  ELSE set_id END;
+-- Tres tomas adicionales por fotografía base para poblar visualmente cada set demo.
+INSERT INTO photos(event_id,set_id,title,bib_number,price,original_path,preview_path,file_size,watermark_enabled,watermark_type,watermark_text,watermark_scale,watermark_opacity,download_enabled,status)
+SELECT event_id,set_id,CONCAT(title,' · Toma 2'),bib_number,price,original_path,CONCAT(preview_path,'&crop=faces&fit=crop'),file_size,watermark_enabled,watermark_type,watermark_text,watermark_scale,watermark_opacity,download_enabled,status FROM photos WHERE id<=32;
+INSERT INTO photos(event_id,set_id,title,bib_number,price,original_path,preview_path,file_size,watermark_enabled,watermark_type,watermark_text,watermark_scale,watermark_opacity,download_enabled,status)
+SELECT event_id,set_id,CONCAT(title,' · Toma 3'),bib_number,price,original_path,CONCAT(preview_path,'&crop=entropy&fit=crop'),file_size,watermark_enabled,watermark_type,watermark_text,watermark_scale,watermark_opacity,download_enabled,status FROM photos WHERE id<=32;
+INSERT INTO photos(event_id,set_id,title,bib_number,price,original_path,preview_path,file_size,watermark_enabled,watermark_type,watermark_text,watermark_scale,watermark_opacity,download_enabled,status)
+SELECT event_id,set_id,CONCAT(title,' · Toma 4'),bib_number,price,original_path,CONCAT(preview_path,'&crop=center&fit=crop'),file_size,watermark_enabled,watermark_type,watermark_text,watermark_scale,watermark_opacity,download_enabled,status FROM photos WHERE id<=32;
 UPDATE photo_sets ps SET cover_photo_id=(SELECT MIN(p.id) FROM photos p WHERE p.set_id=ps.id);
 UPDATE photo_sets SET featured_home=1;
 INSERT INTO event_catalog(event_id,cover_path,description) VALUES
