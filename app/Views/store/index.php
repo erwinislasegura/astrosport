@@ -8,6 +8,19 @@ $heroBackground=preg_match('~^https?://~i',(string)$hero['background_url'])?$her
  <div class="reference-shade"></div><div class="reference-hero-copy"><span class="reference-eyebrow"><?=htmlspecialchars($hero['eyebrow'])?></span><h1><?=htmlspecialchars($heroTitle)?></h1><p><?=htmlspecialchars($hero['description'])?></p>
  <form class="reference-search" action="<?=url()?>" method="get"><span aria-hidden="true">⌕</span><input name="q" value="<?=htmlspecialchars($_GET['q']??'')?>" placeholder="<?=htmlspecialchars($hero['search_placeholder'])?>"><button><?=htmlspecialchars($hero['button_text'])?></button></form></div>
 </section>
+<?php if($events):?>
+<section class="discovery-collections" aria-labelledby="featuredCollectionsTitle">
+ <div class="discovery-heading"><div><span>COLECCIONES EDITORIALES</span><h2 id="featuredCollectionsTitle">Coberturas destacadas</h2><p>Explora eventos recientes y entra directamente a sus galerías deportivas.</p></div><a href="<?=url('eventos')?>">Ver todos los eventos →</a></div>
+ <div class="discovery-track">
+  <?php foreach(array_slice($events,0,4) as $event):?><?php $eventCover=!empty($event['cover_path'])?media($event['cover_path']):preview_url(['id'=>$event['cover_id'],'preview_path'=>$event['preview_path']]);?>
+  <a class="discovery-event" href="<?=url('evento?slug='.rawurlencode($event['slug']))?>">
+   <img src="<?=htmlspecialchars($eventCover)?>" alt="<?=htmlspecialchars($event['name'])?>">
+   <span><?=htmlspecialchars($event['sport'])?></span><div><small><?=date('d M Y',strtotime($event['event_date']))?> · <?=htmlspecialchars($event['location']??'')?></small><h3><?=htmlspecialchars($event['name'])?></h3><p><?=$event['sets_count']?> sets · <?=$event['photos_count']?> fotografías</p></div>
+  </a>
+  <?php endforeach;?>
+ </div>
+</section>
+<?php endif;?>
 <section class="reference-archive" id="fotos">
  <div class="reference-archive-title"><div><span class="reference-kicker">Compra tus fotografías</span><h2>Últimas coberturas</h2></div><small><?=count($catalogSets)?> colecciones disponibles</small></div>
  <div class="reference-categories"><a class="<?=empty($categorySlug)?'active':''?>" href="<?=url('#fotos')?>">Todas</a><?php foreach($categories as $category):?><a class="<?=$categorySlug===$category['slug']?'active':''?>" href="<?=url('?category='.rawurlencode($category['slug']).'#fotos')?>"><?=htmlspecialchars($category['name'])?></a><?php endforeach;?></div>
