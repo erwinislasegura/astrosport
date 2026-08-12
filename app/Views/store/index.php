@@ -5,6 +5,7 @@ $heroTitle=trim($hero['title'].' '.($hero['highlight']??''));
 $heroBackground=preg_match('~^https?://~i',(string)$hero['background_url'])?$hero['background_url']:url('hero-imagen?v='.rawurlencode((string)($hero['updated_at']??'')));
 ?>
 <section class="reference-hero" id="inicio" style="--hero-image:url('<?=htmlspecialchars($heroBackground)?>')">
+ <video class="reference-hero-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true"><source src="<?=url('assets/hero-fluid.mp4')?>" type="video/mp4"></video>
  <div class="reference-shade"></div><div class="reference-hero-copy"><span class="reference-eyebrow"><?=htmlspecialchars($hero['eyebrow'])?></span><h1><?=htmlspecialchars($heroTitle)?></h1><p><?=htmlspecialchars($hero['description'])?></p>
  <form class="reference-search" action="<?=url()?>" method="get"><span aria-hidden="true">⌕</span><input name="q" value="<?=htmlspecialchars($_GET['q']??'')?>" placeholder="<?=htmlspecialchars($hero['search_placeholder'])?>"><button><?=htmlspecialchars($hero['button_text'])?></button></form></div>
 </section>
