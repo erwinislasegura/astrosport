@@ -1,0 +1,15 @@
+:root{--lime:#063eff!important;--blue:#063eff;--ink:#090b10;--paper:#f5f5f6;--bg:#f5f6f8;--line:#d9dbe0;--muted:#656a75}
+html{scroll-behavior:smooth}body{font-family:Inter,Arial,sans-serif;background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:Inter,Arial,sans-serif;line-height:1.08;letter-spacing:-.035em;text-transform:none}h1{font-size:clamp(2rem,4.2vw,3.5rem)}h2{font-size:clamp(1.55rem,2.8vw,2.35rem)}em{color:var(--blue);font-style:normal}
+.topline{background:#02040a;color:#aeb5c4;border-bottom:1px solid #202532;font-size:8px;letter-spacing:.1em}
+header{height:76px;background:rgba(3,5,10,.97);border-bottom:1px solid rgba(255,255,255,.13);backdrop-filter:blur(18px)}
+.brand img,footer img,.sidebar-logo img,.login-brand img{width:clamp(190px,19vw,250px);max-height:52px;object-fit:contain}
+nav{font-size:11px;letter-spacing:.01em;text-transform:none}.cart,.btn-primary,.primary,button[type=submit]{background:var(--blue);border-color:var(--blue);color:#fff}.cart b{background:#fff;color:var(--blue)}
+.hero{min-height:590px;background-color:#05070c}.hero:before{background:linear-gradient(90deg,rgba(2,5,12,.96),rgba(2,5,12,.76) 44%,rgba(2,5,12,.17) 80%)}
+.hero h1{max-width:680px;font-size:clamp(2.2rem,4.3vw,3.55rem);line-height:1.02}.hero p{font-size:13px;line-height:1.55}.kicker,.eyebrow{color:#86b5ff}.search{box-shadow:0 18px 55px rgba(0,0,0,.32)}.search button{background:var(--blue);color:#fff}
+.section,.shop{max-width:1400px}.products{gap:16px}.products article,.set-card,.event-card,.panel{border-radius:0;border-color:#e0e2e7;box-shadow:0 2px 5px rgba(8,14,29,.04)}.products article:hover,.set-card:hover,.event-card:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(11,18,37,.12)}
+.pic{background:#151922}.pic span,.photo-large span,.wm{font-family:Inter,sans-serif;font-size:clamp(17px,2vw,28px);letter-spacing:.08em}.products h3{font-size:15px;line-height:1.35}.products strong{font-size:16px}
+.benefits,.process,.home-cta{border-radius:0}.footer-admin:hover{border-color:#86b5ff;color:#86b5ff}footer{background:#04060a;color:#8c93a0}
+.admin-shell,.admin-login{--lime:#063eff;--accent:#063eff}.sidebar{background:#04060a}.sidebar-logo{border-bottom-color:#252a35}.content{background:#f5f6f8}.title h1,.admin-head h1{font-size:clamp(2rem,3.4vw,3rem)}.kpis article,.panel,.login-card{border-radius:0}.kpis article:before,.event-bar i,.spark span,.goal i{background:#063eff!important}.used-ring{stroke:#063eff!important}.status.paid,.table-status.active{background:#eaf0ff;color:#063eff}.btn-primary{background:#063eff!important}.btn-primary:hover{background:#002fc7!important}
+input:focus,select:focus,textarea:focus{border-color:#063eff!important;outline:2px solid #063eff18}.hamb{background:transparent!important}
+@media(max-width:760px){header{height:68px}.brand img{width:175px}.hero{min-height:520px}.products{grid-template-columns:repeat(2,minmax(0,1fr))}.pic{height:230px}.products article>div{padding:10px}.products h3{font-size:12px}.products strong{font-size:13px}}
