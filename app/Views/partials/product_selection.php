@@ -8,7 +8,7 @@ $editorialDate = !empty($photo['event_date']) ? date('d/m/Y',strtotime($photo['e
   <span class="editorial-photo-frame">
    <img src="<?=preview_url($item)?>" alt="<?=htmlspecialchars($item['title'])?>">
    <span class="editorial-photo-meta"><b><?=htmlspecialchars($photo['set_name']?:$item['title'])?></b><small><?=htmlspecialchars($photo['category_name']?:$photo['event_name'])?><?=$editorialDate?' · '.$editorialDate:''?></small></span>
-   <span class="editorial-photo-actions"><a href="<?=$similarUrl?>">Imágenes similares</a><button type="button" data-save-photo="<?=$item['id']?>">＋ Guardar</button><button type="button" data-cart-photo data-photo-id="<?=$item['id']?>" aria-label="Agregar al carrito">🛒</button></span>
+   <span class="editorial-photo-actions"><a href="<?=$similarUrl?>">Imágenes similares</a><button type="button" data-save-photo="<?=$item['id']?>">＋ Guardar</button><button type="button" data-cart-photo data-photo-id="<?=$item['id']?>" aria-label="Agregar al carrito"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.2 10.1a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L20.3 8H7M10 20h.01M17 20h.01"/></svg><span>Carrito</span></button></span>
   </span>
   <small><?=htmlspecialchars($item['title'])?></small><b><?=money((int)$item['price'])?></b>
  </article>
