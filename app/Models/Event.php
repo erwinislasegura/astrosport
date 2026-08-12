@@ -113,7 +113,7 @@ final class Event
     public static function saveComposition(int $eventId, string $description, ?string $coverPath, array $setIds): void
     {
         if (!self::ensureModule()) {
-            throw new \RuntimeException('Debes ejecutar database/update_events_module.sql antes de guardar el evento.');
+            throw new \RuntimeException('La base está incompleta. Importa database/astrosport_complete.sql en una instalación nueva.');
         }
 
         $db = Database::db();

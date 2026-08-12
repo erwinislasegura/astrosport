@@ -41,7 +41,7 @@ final class EventController
             redirect('/admin/eventos'.($id ? '?id='.$id : ''));
         }
         if (!Event::ensureModule()) {
-            $_SESSION['error'] = 'Primero importa database/update_events_module.sql en la base de datos.';
+            $_SESSION['error'] = 'La base está incompleta. Importa database/astrosport_complete.sql en una instalación nueva.';
             redirect('/admin/eventos'.($id ? '?id='.$id : ''));
         }
 

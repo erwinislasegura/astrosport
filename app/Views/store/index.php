@@ -1,112 +1,20 @@
-<?php require ROOT.'/app/Views/partials/home_hero.php'; ?>
-
-<?php if ($events): ?>
-<section class="section" id="eventos">
-    <div class="section-title">
-        <div>
-            <span class="eyebrow dark">COLECCIONES RECIENTES</span>
-            <h2>ÚLTIMOS <em>EVENTOS</em></h2>
-        </div>
-        <a href="<?= url('eventos') ?>">VER TODOS →</a>
-    </div>
-    <div class="event-grid">
-        <?php foreach ($events as $event): ?>
-            <?php $eventCover = !empty($event['cover_path']) ? media($event['cover_path']) : preview_url(['id' => $event['cover_id'], 'preview_path' => $event['preview_path']]); ?>
-            <article>
-                <a href="<?= url('evento?slug='.$event['slug']) ?>">
-                    <img src="<?= $eventCover ?>" alt="<?= htmlspecialchars($event['name']) ?>">
-                    <span><?= htmlspecialchars(strtoupper($event['sport'])) ?></span>
-                    <div>
-                        <small><?= date('d M Y', strtotime($event['event_date'])) ?></small>
-                        <h3><?= htmlspecialchars($event['name']) ?></h3>
-                        <b><?= (int)$event['photos_count'] ?> FOTOS · <?= (int)$event['sets_count'] ?> SETS <i>VER EVENTO →</i></b>
-                    </div>
-                </a>
-            </article>
-        <?php endforeach; ?>
-    </div>
+<?php
+$heroDefaults=['eyebrow'=>'AstroSport · Archivo deportivo','title'=>'Fotografía que captura la intensidad del deporte.','description'=>'Encuentra tu evento, selecciona tus imágenes y recíbelas en alta resolución.','search_placeholder'=>'Busca por deporte, evento o ciudad','button_text'=>'Buscar','background_url'=>'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=1900&q=90'];
+$hero=array_merge($heroDefaults,is_array($hero??null)?$hero:[]);
+$heroTitle=trim($hero['title'].' '.($hero['highlight']??''));
+$heroBackground=preg_match('~^https?://~i',(string)$hero['background_url'])?$hero['background_url']:url('hero-imagen?v='.rawurlencode((string)($hero['updated_at']??'')));
+?>
+<section class="reference-hero" id="inicio" style="--hero-image:url('<?=htmlspecialchars($heroBackground)?>')">
+ <div class="reference-shade"></div><div class="reference-hero-copy"><span class="reference-eyebrow"><?=htmlspecialchars($hero['eyebrow'])?></span><h1><?=htmlspecialchars($heroTitle)?></h1><p><?=htmlspecialchars($hero['description'])?></p>
+ <form class="reference-search" action="<?=url()?>" method="get"><span aria-hidden="true">⌕</span><input name="q" value="<?=htmlspecialchars($_GET['q']??'')?>" placeholder="<?=htmlspecialchars($hero['search_placeholder'])?>"><button><?=htmlspecialchars($hero['button_text'])?></button></form></div>
 </section>
-<?php endif; ?>
-
-<?php require ROOT.'/app/Views/partials/home_cta.php'; ?>
-
-<?php if ($sets): ?>
-<section class="featured-sets section">
-    <div class="section-title">
-        <div>
-            <span class="eyebrow dark">AHORRA CON EL PACK</span>
-            <h2>SETS <em>COMPLETOS.</em></h2>
-            <p>Todas las fotografías del lote en una sola compra.</p>
-        </div>
-    </div>
-    <div class="set-grid">
-        <?php foreach ($sets as $set): ?>
-            <article class="featured-set-card">
-                <div class="product-slider featured-set-media" data-product-slider>
-                    <?php foreach (($setPreviews[$set['id']] ?? []) as $index => $slide): ?>
-                        <img class="<?= $index === 0 ? 'active' : '' ?>" src="<?= preview_url($slide) ?>" alt="<?= htmlspecialchars($set['name']) ?>">
-                    <?php endforeach; ?>
-                </div>
-                <div class="set-card-copy">
-                    <small><?= htmlspecialchars($set['event_name']) ?></small>
-                    <h3><?= htmlspecialchars($set['name']) ?></h3>
-                    <p><?= (int)$set['photos_count'] ?> fotografías</p>
-                    <strong><?= money((int)$set['set_price']) ?></strong>
-                    <form method="post" action="<?= url('carrito/agregar') ?>">
-                        <input type="hidden" name="_token" value="<?= csrf() ?>">
-                        <input type="hidden" name="type" value="set">
-                        <input type="hidden" name="id" value="<?= (int)$set['id'] ?>">
-                        <button>COMPRAR SET →</button>
-                    </form>
-                </div>
-            </article>
-        <?php endforeach; ?>
-    </div>
+<section class="reference-archive" id="fotos">
+ <div class="reference-archive-title"><div><span class="reference-kicker">Compra tus fotografías</span><h2>Últimas coberturas</h2></div><small><?=count($catalogSets)?> colecciones disponibles</small></div>
+ <div class="reference-categories"><a class="active" href="<?=url('#fotos')?>">Todas</a><?php foreach(array_slice($events,0,6) as $event):?><a href="<?=url('evento?slug='.$event['slug'])?>"><?=htmlspecialchars($event['sport'])?></a><?php endforeach;?></div>
+ <form class="reference-filters" action="<?=url()?>" method="get"><label><span>Buscar archivo</span><input name="q" value="<?=htmlspecialchars($_GET['q']??'')?>" placeholder="Número, set o evento"></label><label><span>Ordenar</span><select name="orden"><option>Recientes</option><option>Nombre</option></select></label><button>Aplicar filtros</button><?php if(!empty($_GET['q'])):?><a href="<?=url('#fotos')?>">Limpiar</a><?php endif;?></form>
+ <?php if($catalogSets):?><div class="reference-wall"><?php foreach($catalogSets as $index=>$set):?><?php $slides=$setPreviews[$set['id']]??[];$cover=$slides[0]??['id'=>$set['cover_id'],'preview_path'=>$set['preview_path']];?>
+ <article class="reference-card"><a class="reference-photo <?=['landscape','portrait','square'][$index%3]?>" href="<?=url('foto?id='.$set['cover_id'])?>"><img src="<?=preview_url($cover)?>" alt="<?=htmlspecialchars($set['name'])?>"><b><?=htmlspecialchars($set['event_name'])?></b><span>Ver galería →</span></a><div class="reference-caption"><p><?=(int)$set['photos_count']?> fotografías<?=!empty($set['bib_number'])?' · Nº '.htmlspecialchars($set['bib_number']):''?></p><h3><?=htmlspecialchars($set['name'])?></h3><div><strong>Desde <?=money((int)$set['individual_price'])?></strong><a href="<?=url('foto?id='.$set['cover_id'])?>">Seleccionar</a></div></div></article>
+ <?php endforeach;?></div><?php else:?><div class="reference-empty"><h3>No encontramos fotografías.</h3><a href="<?=url('#fotos')?>">Ver todo el archivo</a></div><?php endif;?>
 </section>
-<?php endif; ?>
-
-<section class="shop" id="fotos">
-    <div class="section">
-        <div class="section-title light">
-            <div>
-                <span class="eyebrow">SETS PUBLICADOS</span>
-                <h2>TUS FOTOS, <em>LISTAS.</em></h2>
-                <p>Abre tu set para revisar las fotografías y elegir compra individual, pack o set completo.</p>
-            </div>
-            <form>
-                <input name="q" value="<?= htmlspecialchars($_GET['q'] ?? '') ?>" placeholder="Buscar Nº, set o evento">
-            </form>
-        </div>
-
-        <div class="product-grid">
-            <?php foreach ($catalogSets as $set): ?>
-                <?php $bibNumber = trim((string)($set['bib_number'] ?? '')); ?>
-                <article class="product home-product-card">
-                    <a href="<?= url('foto?id='.$set['cover_id']) ?>" class="photo home-product-media">
-                        <div class="product-slider" data-product-slider>
-                            <?php foreach (($setPreviews[$set['id']] ?? []) as $index => $slide): ?>
-                                <img class="<?= $index === 0 ? 'active' : '' ?>" src="<?= preview_url($slide) ?>" alt="<?= htmlspecialchars($set['name']) ?>">
-                            <?php endforeach; ?>
-                        </div>
-                        <span class="wm" aria-hidden="true">ASTROSPORT</span>
-                        <?php if ($bibNumber !== ''): ?><b class="product-bib">#<?= htmlspecialchars($bibNumber) ?></b><?php endif; ?>
-                        <em class="set-badge"><?= (int)$set['photos_count'] ?> FOTOS</em>
-                    </a>
-                    <div class="product-card-info">
-                        <span class="product-card-copy">
-                            <small><?= htmlspecialchars($set['event_name']) ?></small>
-                            <strong title="<?= htmlspecialchars($set['name']) ?>"><?= htmlspecialchars($set['name']) ?></strong>
-                        </span>
-                        <a class="product-card-action" href="<?= url('foto?id='.$set['cover_id']) ?>">VER FOTOS <span aria-hidden="true">→</span></a>
-                    </div>
-                </article>
-            <?php endforeach; ?>
-        </div>
-
-        <?php if (!$catalogSets): ?>
-            <p class="empty-catalog">No hay sets publicados que coincidan con tu búsqueda.</p>
-        <?php endif; ?>
-    </div>
-</section>
-
-<?php require ROOT.'/app/Views/partials/home_process.php'; ?>
+<section class="reference-benefits"><div><b>Entrega digital HD</b><span>Archivos en alta resolución</span></div><div><b>Compra protegida</b><span>Confirmación antes del pago</span></div><div><b>Uso personal</b><span>Licencia incluida por fotografía</span></div></section>
+<section class="reference-contact"><div><span>Para clubes y organizaciones</span><h2>¿Necesitas cobertura para tu evento?</h2></div><a href="mailto:contacto@astrosport.cl">Solicitar propuesta →</a></section>

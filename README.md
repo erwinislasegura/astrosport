@@ -1,6 +1,6 @@
 # AstroSport · Plataforma de fotografía deportiva
 
-Sistema de venta y entrega de fotografías deportivas desarrollado en PHP 8.1+, arquitectura MVC y MySQL. La portada y toda la interfaz siguen la identidad del prototipo `index.html` incluido en la raíz.
+Sistema de venta y entrega de fotografías deportivas desarrollado en PHP 8.1+, arquitectura MVC y MySQL. La portada dinámica replica el diseño del prototipo `index.html` incluido en la raíz y obtiene sus galerías desde MySQL.
 
 ## Funciones incluidas
 
@@ -17,11 +17,11 @@ Sistema de venta y entrega de fotografías deportivas desarrollado en PHP 8.1+, 
 ## Instalación nueva
 
 1. Copia el proyecto dentro de `htdocs/astrosport` o `public_html`.
-2. Crea una base MySQL e importa `database/astrosport_complete.sql`.
+2. Crea una base MySQL e importa el único instalador `database/astrosport_complete.sql`. Incluye el esquema completo y todos los datos demo; no hace falta ejecutar actualizaciones adicionales.
 3. Configura las credenciales en `config/config.php` o mediante `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS` y `APP_URL`.
 4. Usa PHP 8.1 o superior con PDO MySQL, GD, cURL, OpenSSL, fileinfo, ZipArchive y mod_rewrite.
 5. Da permisos de escritura al usuario de Apache sobre `storage/originals`, `storage/previews` y `uploads/events`.
-6. Ejecuta `php database/create_admin.php` para crear o restablecer el administrador.
+6. Ingresa con el usuario demo `admin@astrosport.cl` y la clave temporal `password`; cámbiala antes de publicar el sitio.
 
 ## Rutas principales
 
