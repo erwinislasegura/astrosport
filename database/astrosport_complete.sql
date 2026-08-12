@@ -40,9 +40,6 @@ INSERT INTO roles(name,slug,permissions,is_system) VALUES
 ('Administrador','administrador',JSON_ARRAY('dashboard.view','photos.manage','orders.manage','users.manage','roles.manage'),1),
 ('Editor fotográfico','editor-fotografico',JSON_ARRAY('dashboard.view','photos.manage'),1),
 ('Ventas','ventas',JSON_ARRAY('dashboard.view','orders.manage'),1);
--- Acceso demo: admin@astrosport.cl / password (cambiar al instalar en producción).
-INSERT INTO users(role_id,name,email,password_hash,status) VALUES
-(1,'Administrador Demo','admin@astrosport.cl','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi','active');
 INSERT INTO events(name,slug,sport,event_date,location) VALUES
 ('Trail Volcán Antuco','trail-volcan-antuco','Running','2026-08-02','Antuco'),
 ('Liga Urbana','liga-urbana','Fútbol','2026-07-26','Concepción'),
@@ -61,7 +58,27 @@ INSERT INTO photos(event_id,title,bib_number,price,original_path,preview_path,fi
 (2,'Básquet urbano','96',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=900&q=85',5600000),
 (3,'Pelotón compacto','511',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1486218119243-13883505764c?auto=format&fit=crop&w=900&q=85',6300000),
 (1,'Último kilómetro','73',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1592656094267-764a45160876?auto=format&fit=crop&w=900&q=85',5100000),
-(2,'Celebración final','57',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1534158914592-062992fbe900?auto=format&fit=crop&w=900&q=85',5450000);
+(2,'Celebración final','57',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1534158914592-062992fbe900?auto=format&fit=crop&w=900&q=85',5450000),
+(1,'Salida del circuito','184',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1538805060514-97d9cc17730c?auto=format&fit=crop&w=900&q=85',5210000),
+(1,'Cruce por el bosque','184',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=900&q=85',5340000),
+(1,'Ascenso entre senderos','184',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=85',5480000),
+(1,'Paso cordillerano','184',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=85',5560000),
+(1,'Esfuerzo en la pendiente','184',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=900&q=85',5190000),
+(1,'Últimos metros','184',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1483721310020-03333e577078?auto=format&fit=crop&w=900&q=85',5270000),
+(1,'Llegada a la meta','184',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=900&q=85&sat=-10',5410000),
+(2,'Disputa del balón','24',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=900&q=85',5740000),
+(2,'Ataque por la banda','11',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1553778263-73a83bab9b0c?auto=format&fit=crop&w=900&q=85',5880000),
+(2,'Remate al arco','9',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=900&q=85',5960000),
+(2,'Defensa en acción','4',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1551958219-acbc608c6377?auto=format&fit=crop&w=900&q=85',5670000),
+(2,'Jugada colectiva','18',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1575361204480-aadea25e6e68?auto=format&fit=crop&w=900&q=85',5820000),
+(2,'Abrazo de gol','7',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1526232761682-d26e03ac148e?auto=format&fit=crop&w=900&q=85&sat=-5',6030000),
+(2,'Final del encuentro','1',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1560272564-c83b66b1ad12?auto=format&fit=crop&w=900&q=85',5710000),
+(3,'Inicio del descenso','302',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=900&q=85',6180000),
+(3,'Curva de montaña','302',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1528629297340-d1d466945dc5?auto=format&fit=crop&w=900&q=85',6260000),
+(3,'Pelotón en ruta','302',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1502744688674-c619d1586c9e?auto=format&fit=crop&w=900&q=85',6340000),
+(3,'Ataque en subida','302',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=900&q=85',6120000),
+(3,'Paso por el valle','302',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1541625602330-2277a4c46182?auto=format&fit=crop&w=900&q=85&sat=-8',6450000),
+(3,'Sprint de llegada','302',4990,'assets/descarga-demo.txt','https://images.unsplash.com/photo-1530137073520-4ea6e2f10a48?auto=format&fit=crop&w=900&q=85',6220000);
 UPDATE photos SET set_id=1 WHERE event_id=1;
 UPDATE photos SET set_id=2 WHERE event_id=2;
 UPDATE photos SET set_id=3 WHERE event_id=3;

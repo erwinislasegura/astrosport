@@ -21,7 +21,7 @@ Sistema de venta y entrega de fotografías deportivas desarrollado en PHP 8.1+, 
 3. Configura las credenciales en `config/config.php` o mediante `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS` y `APP_URL`.
 4. Usa PHP 8.1 o superior con PDO MySQL, GD, cURL, OpenSSL, fileinfo, ZipArchive y mod_rewrite.
 5. Da permisos de escritura al usuario de Apache sobre `storage/originals`, `storage/previews` y `uploads/events`.
-6. Ingresa con el usuario demo `admin@astrosport.cl` y la clave temporal `password`; cámbiala antes de publicar el sitio.
+6. Crea el administrador desde la terminal con `php scripts/create_admin.php`. El script solicitará una contraseña segura y generará un hash compatible con la versión de PHP instalada.
 
 ## Rutas principales
 
