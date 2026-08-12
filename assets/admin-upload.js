@@ -189,7 +189,7 @@ render();
 
 // Categoría asignada al set completo.
 const eventSelect = document.querySelector('select[name="event_id"]');
-if (eventSelect && Array.isArray(window.astroCategories)) {
+if (eventSelect && !document.querySelector('select[name="category_id"]') && Array.isArray(window.astroCategories)) {
   const label = document.createElement('label');
   label.textContent = 'CATEGORÍA';
   const select = document.createElement('select');
