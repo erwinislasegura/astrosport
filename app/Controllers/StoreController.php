@@ -112,7 +112,7 @@ final class StoreController
             'events' => Event::publishedEvents(),
             'pageTitle' => 'Eventos deportivos | AstroSport',
             'flowPage' => true,
-            'bodyClass' => 'inner',
+            'bodyClass' => 'inner events-page',
             'toplineRight' => 'COLECCIONES FOTOGRÁFICAS',
         ]);
     }
