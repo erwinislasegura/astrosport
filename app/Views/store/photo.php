@@ -13,7 +13,9 @@ $bibNumber = trim((string)($photo['bib_number'] ?? ''));
  <style>.editorial-detail{width:calc(100% - 12px)!important;max-width:none!important}.editorial-photo-meta,.editorial-photo-meta b,.editorial-photo-meta small,.editorial-photo-actions a,.editorial-photo-actions button{color:#fff!important}.editorial-photo-actions button svg,.editorial-photo-actions button i{color:#fff!important;fill:#fff!important;stroke:#fff!important}.editorial-photo-actions button[data-cart-photo].selected{background:rgba(8,11,16,.78)!important}</style>
  <header class="editorial-set-head">
   <div>
+   <span><?=htmlspecialchars(strtoupper($photo['category_name']?:$eventName))?></span>
    <h1><?= htmlspecialchars($setTitle) ?></h1>
+   <p><?=$photoCount?> <?=$photoLabel?> disponibles en alta resolución<?=$bibNumber!==''?' · Competidor #'.htmlspecialchars($bibNumber):''?></p>
   </div>
  </header>
 
