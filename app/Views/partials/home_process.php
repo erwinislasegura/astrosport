@@ -28,7 +28,7 @@
      <span class="process-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="1"></rect><circle cx="9" cy="10" r="1.5"></circle><path d="m6.5 17 4-4 2.5 2.5 2-2 2.5 3.5"></path></svg></span>
      <span class="process-step">02</span>
     </div>
-    <div class="process-copy"><small>SELECCIONA</small><h3>ELIGE<br>TUS FOTOS</h3><p>Selecciona imágenes individuales, aprovecha un pack o compra el set completo de tu participación.</p></div>
+    <div class="process-copy"><small>AGREGA</small><h3>ELIGE<br>TUS FOTOS</h3><p>Agrega fotografías directamente al carrito o compra el set completo de tu participación.</p></div>
     <div class="process-meta"><span>FOTO, PACK O SET</span><b aria-hidden="true">→</b></div>
    </article>
   </li>

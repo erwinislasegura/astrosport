@@ -14,7 +14,7 @@ $photoCount=array_sum(array_map(static fn($set)=>(int)$set['photos_count'],$sets
 </section>
 
 <section class="event-sets-section section" id="sets-evento">
- <div class="event-sets-head"><div><span class="eyebrow dark">COLECCIÓN DEL EVENTO</span><h2>ELIGE TU <em>SET.</em></h2><p>Cada set puede incluir compra individual, packs por cantidad o descarga completa.</p></div><b><?=count($sets)?> SETS PUBLICADOS</b></div>
+ <div class="event-sets-head"><div><span class="eyebrow dark">COLECCIÓN DEL EVENTO</span><h2>ELIGE TU <em>SET.</em></h2><p>Compra una fotografía individual o descarga el set completo.</p></div><b><?=count($sets)?> SETS PUBLICADOS</b></div>
  <div class="event-public-set-grid">
   <?php foreach($sets as $set):?>
   <article>
@@ -25,7 +25,7 @@ $photoCount=array_sum(array_map(static fn($set)=>(int)$set['photos_count'],$sets
    <div class="event-set-details">
     <small><?=$set['bib_number']!==null&&$set['bib_number']!==''?'COMPETIDOR #'.htmlspecialchars($set['bib_number']):htmlspecialchars(strtoupper($event['sport']))?></small>
     <h3><?=htmlspecialchars($set['name'])?></h3>
-    <div class="event-sale-modes"><?php if($set['individual_enabled']):?><span>INDIVIDUAL</span><?php endif;?><?php if($set['pack_enabled']):?><span>PACKS</span><?php endif;?><?php if($set['set_enabled']):?><span>SET COMPLETO</span><?php endif;?></div>
+    <div class="event-sale-modes"><?php if($set['individual_enabled']):?><span>INDIVIDUAL</span><?php endif;?><?php if($set['set_enabled']):?><span>SET COMPLETO</span><?php endif;?></div>
     <div class="event-set-price"><span>DESDE <b><?=money((int)($set['individual_enabled']?$set['individual_price']:$set['set_price']))?></b></span><a href="<?=url('foto?id='.$set['cover_id'])?>">VER FOTOGRAFÍAS →</a></div>
    </div>
   </article>

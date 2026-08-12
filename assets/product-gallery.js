@@ -52,59 +52,6 @@
  const initialChoice=previewChoices.find(choice=>choice.classList.contains('is-viewing'))||previewChoices[0];
  if(initialChoice)showPreview(initialChoice);
 
- const money=value=>'$'+new Intl.NumberFormat('es-CL').format(value);
- document.querySelectorAll('.smart-photo-selection').forEach(form=>{
-  const checks=[...form.querySelectorAll('.smart-selector input[type="checkbox"]')];
-  const packs=[...form.querySelectorAll('[data-pack-quantity]')].map(node=>({node,quantity:Number(node.dataset.packQuantity),price:Number(node.dataset.packPrice)}));
-  const individual=form.dataset.individualEnabled==='1';
-  const count=form.querySelector('.smart-count');
-  const total=form.querySelector('.smart-total');
-  const mode=form.querySelector('.smart-mode');
-  const mobileCount=form.querySelector('.mobile-picker-count');
-  const mobileTotal=form.querySelector('.mobile-picker-total');
-  const mobileMode=form.querySelector('.mobile-picker-mode');
-  const buttons=[...form.querySelectorAll('button[type="submit"]')];
-
-  function setButtons(disabled,label){buttons.forEach(button=>{button.disabled=disabled;button.textContent=label;});}
-
-  function update(){
-   const selected=checks.filter(check=>check.checked);
-   const pack=packs.find(item=>item.quantity===selected.length);
-   count.textContent=selected.length;
-   if(mobileCount)mobileCount.textContent=selected.length;
-   packs.forEach(item=>item.node.classList.toggle('active',item===pack));
-   if(pack){
-    total.textContent=money(pack.price);
-    if(mobileTotal)mobileTotal.textContent=money(pack.price);
-    mode.textContent=`PACK DE ${pack.quantity} ACTIVADO`;
-    mode.className='smart-mode pack-active';
-    if(mobileMode){mobileMode.textContent=`PACK DE ${pack.quantity} ACTIVADO`;mobileMode.className='mobile-picker-mode pack-active';}
-    setButtons(false,`AGREGAR PACK DE ${pack.quantity} FOTOS →`);
-   }else if(individual&&selected.length){
-    const individualTotal=money(selected.reduce((sum,check)=>sum+Number(check.dataset.price||0),0));
-    total.textContent=individualTotal;
-    if(mobileTotal)mobileTotal.textContent=individualTotal;
-    mode.textContent='VALOR INDIVIDUAL';
-    mode.className='smart-mode';
-    if(mobileMode){mobileMode.textContent='VALOR INDIVIDUAL';mobileMode.className='mobile-picker-mode';}
-    setButtons(false,'AGREGAR SELECCIÓN AL CARRITO →');
-   }else{
-    total.textContent='$0';
-    if(mobileTotal)mobileTotal.textContent='$0';
-    mode.textContent=selected.length?'CANTIDAD SIN PACK':'ELIGE TUS FOTOS';
-    mode.className='smart-mode';
-    if(mobileMode){mobileMode.textContent=selected.length?'CANTIDAD SIN PACK':'ELIGE TUS FOTOS';mobileMode.className='mobile-picker-mode';}
-    setButtons(true,'SELECCIONA UNA CANTIDAD DE PACK');
-   }
-  }
-
-  checks.forEach(check=>check.addEventListener('change',()=>{
-   showPreview(check.closest('[data-preview-image]'));
-   update();
-  }));
-  update();
- });
-
  const savedKey='astrosport_saved_photos';
  let saved=[];
  try{saved=JSON.parse(localStorage.getItem(savedKey)||'[]').map(String);}catch(error){saved=[];}
@@ -115,25 +62,19 @@
   button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();saved=saved.includes(id)?saved.filter(item=>item!==id):[...saved,id];try{localStorage.setItem(savedKey,JSON.stringify(saved));}catch(error){}render();});
  });
  document.querySelectorAll('[data-cart-photo]').forEach(button=>{
-  const label=button.closest('.photo-choice');
-  const checkbox=label?.querySelector('input[type="checkbox"]');
-  const render=()=>button.classList.toggle('selected',Boolean(checkbox?.checked));
-  render();
   button.addEventListener('click',event=>{
-   event.preventDefault();event.stopPropagation();if(!checkbox||button.disabled)return;
+   event.preventDefault();event.stopPropagation();if(button.disabled)return;
    button.disabled=true;
-   const sourceForm=button.closest('form');
+   const gallery=button.closest('[data-photo-gallery]');
    const form=document.createElement('form');
-   form.method='post';
-   form.action=(sourceForm?.action||'').replace(/carrito\/agregar-seleccion.*$/,'carrito/agregar');
-   const fields={_token:sourceForm?.querySelector('[name="_token"]')?.value||'',type:'photo',id:checkbox.value};
+   form.method='post';form.action=gallery?.dataset.cartAddUrl||'';
+   const fields={_token:gallery?.dataset.csrf||'',type:'photo',id:button.dataset.photoId||''};
    Object.entries(fields).forEach(([name,value])=>{const input=document.createElement('input');input.type='hidden';input.name=name;input.value=value;form.appendChild(input);});
    document.body.appendChild(form);
-   checkbox.checked=true;checkbox.dispatchEvent(new Event('change',{bubbles:true}));render();
+   button.classList.add('selected');
    form.requestSubmit();
    setTimeout(()=>{form.remove();button.disabled=false;},900);
   });
-  checkbox?.addEventListener('change',render);
  });
  document.querySelectorAll('.editorial-photo-actions a').forEach(link=>link.addEventListener('click',event=>event.stopPropagation()));
 })();

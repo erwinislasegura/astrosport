@@ -1,5 +1,5 @@
 <section class="events-page-head">
- <div><span>COLECCIONES FOTOGRÁFICAS</span><h1>EVENTOS <em>PUBLICADOS.</em></h1><p>Explora cada evento y encuentra los sets fotográficos disponibles para compra individual, por pack o como colección completa.</p></div>
+ <div><span>COLECCIONES FOTOGRÁFICAS</span><h1>EVENTOS <em>PUBLICADOS.</em></h1><p>Explora cada evento y encuentra fotografías individuales o sets completos.</p></div>
 </section>
 
 <section class="public-events section">

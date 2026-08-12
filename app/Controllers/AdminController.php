@@ -2,7 +2,6 @@
 namespace App\Controllers;
 use App\Core\Database;
 use App\Models\Category;
-use App\Models\PhotoPack;
 use App\Models\PhotoSet;
 final class AdminController
 {
@@ -138,29 +137,9 @@ final class AdminController
         $individual = isset($_POST["individual_enabled"]);
         $setEnabled = isset($_POST["set_enabled"]);
         $featuredHome = $setEnabled && isset($_POST["featured_home"]);
-        $packOptions = PhotoPack::fromPost();
-        $activePacks = array_values(
-            array_filter($packOptions, fn($o) => !empty($o["active"])),
-        );
-        $packEnabled = !empty($activePacks);
-        $packQuantity = (int) ($activePacks[0]["quantity"] ?? 5);
-        $packPrice = (int) ($activePacks[0]["price"] ?? 14990);
-        $packCounts = [];
-        foreach ($activePacks as $option) {
-            if (
-                $option["quantity"] >
-                    count((array) ($files["tmp_name"] ?? [])) ||
-                in_array($option["quantity"], $packCounts, true)
-            ) {
-                $_SESSION["error"] =
-                    "Cada pack debe tener una cantidad distinta y no superar las fotografías cargadas.";
-                redirect("/admin/fotos");
-            }
-            $packCounts[] = (int) $option["quantity"];
-        }
-        if (!$individual && !$setEnabled && !$packEnabled) {
+        if (!$individual && !$setEnabled) {
             $_SESSION["error"] =
-                "Habilita la venta individual, el set completo o el pack de fotografías.";
+                "Habilita la venta individual o la venta del set completo.";
             redirect("/admin/fotos");
         }
         $setName = trim($_POST["set_name"] ?? "");
@@ -171,7 +150,7 @@ final class AdminController
         $featuredReady = PhotoSet::ensureFeaturedHomeColumn();
         if ($featuredReady) {
             $set = $db->prepare(
-                "INSERT INTO photo_sets(event_id,category_id,name,bib_number,individual_enabled,set_enabled,featured_home,pack_enabled,pack_quantity,pack_price,set_price) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+                "INSERT INTO photo_sets(event_id,category_id,name,bib_number,individual_enabled,set_enabled,featured_home,set_price) VALUES(?,?,?,?,?,?,?,?)",
             );
             $set->execute([
                 $event,
@@ -181,14 +160,11 @@ final class AdminController
                 $individual ? 1 : 0,
                 $setEnabled ? 1 : 0,
                 $featuredHome ? 1 : 0,
-                $packEnabled ? 1 : 0,
-                $packQuantity,
-                $packPrice,
                 max(0, (int) ($_POST["set_price"] ?? 19990)),
             ]);
         } else {
             $set = $db->prepare(
-                "INSERT INTO photo_sets(event_id,category_id,name,bib_number,individual_enabled,set_enabled,pack_enabled,pack_quantity,pack_price,set_price) VALUES(?,?,?,?,?,?,?,?,?,?)",
+                "INSERT INTO photo_sets(event_id,category_id,name,bib_number,individual_enabled,set_enabled,set_price) VALUES(?,?,?,?,?,?,?)",
             );
             $set->execute([
                 $event,
@@ -197,14 +173,10 @@ final class AdminController
                 trim($_POST["bib_number"] ?? ""),
                 $individual ? 1 : 0,
                 $setEnabled ? 1 : 0,
-                $packEnabled ? 1 : 0,
-                $packQuantity,
-                $packPrice,
                 max(0, (int) ($_POST["set_price"] ?? 19990)),
             ]);
         }
         $setId = (int) $db->lastInsertId();
-        PhotoPack::saveOptions($setId, $packOptions);
         $dirs = [ROOT . "/storage/originals", ROOT . "/storage/previews"];
         foreach ($dirs as $dir) {
             if (!is_dir($dir) && !@mkdir($dir, 0775, true)) {
@@ -320,7 +292,7 @@ final class AdminController
         } catch (\Throwable $e) {
         }
         $s = $db->prepare(
-            "SELECT p.*,e.name event_name,ps.category_id,COALESCE(ps.pack_enabled,0) pack_enabled,ps.pack_quantity,ps.pack_price,COALESCE(ps.status,'active') set_status,ps.name set_name,ps.bib_number set_bib_number,$coverSelect,$featuredSelect,COALESCE(ps.individual_enabled,1) individual_enabled,COALESCE(ps.set_enabled,1) set_enabled,ps.set_price FROM photos p JOIN events e ON e.id=p.event_id LEFT JOIN photo_sets ps ON ps.id=p.set_id WHERE p.id=?",
+            "SELECT p.*,e.name event_name,ps.category_id,COALESCE(ps.status,'active') set_status,ps.name set_name,ps.bib_number set_bib_number,$coverSelect,$featuredSelect,COALESCE(ps.individual_enabled,1) individual_enabled,COALESCE(ps.set_enabled,1) set_enabled,ps.set_price FROM photos p JOIN events e ON e.id=p.event_id LEFT JOIN photo_sets ps ON ps.id=p.set_id WHERE p.id=?",
         );
         $s->execute([(int) ($_GET["id"] ?? 0)]);
         $photo = $s->fetch();
@@ -540,39 +512,9 @@ final class AdminController
             $id,
         ]);
         if (!empty($photo["set_id"])) {
-            $packOptions = PhotoPack::fromPost();
-            $activePacks = array_values(
-                array_filter($packOptions, fn($o) => !empty($o["active"])),
-            );
-            $packEnabled = !empty($activePacks);
-            $packQuantity = (int) ($activePacks[0]["quantity"] ?? 5);
-            $packPrice = (int) ($activePacks[0]["price"] ?? 14990);
-            $available =
-                (int) $db
-                    ->query(
-                        "SELECT COUNT(*) FROM photos WHERE set_id=" .
-                            (int) $photo["set_id"],
-                    )
-                    ->fetchColumn() +
-                ($hasAdditional
-                    ? count(array_filter((array) ($additional["name"] ?? [])))
-                    : 0);
-            $counts = [];
-            foreach ($activePacks as $option) {
-                if (
-                    $option["quantity"] > $available ||
-                    in_array($option["quantity"], $counts, true)
-                ) {
-                    $_SESSION["error"] =
-                        "Cada pack debe tener una cantidad distinta y no superar las fotografías del set.";
-                    redirect("/admin/fotos/editar?id=" . $id);
-                }
-                $counts[] = (int) $option["quantity"];
-            }
-            PhotoPack::saveOptions((int) $photo["set_id"], $packOptions);
             if ($featuredReady) {
                 $db->prepare(
-                    "UPDATE photo_sets SET event_id=?,category_id=?,name=?,bib_number=?,individual_enabled=?,set_enabled=?,featured_home=?,set_price=?,pack_enabled=?,pack_quantity=?,pack_price=?,status=? WHERE id=?",
+                    "UPDATE photo_sets SET event_id=?,category_id=?,name=?,bib_number=?,individual_enabled=?,set_enabled=?,featured_home=?,set_price=?,status=? WHERE id=?",
                 )->execute([
                     $event,
                     $categoryId ?: null,
@@ -582,15 +524,12 @@ final class AdminController
                     $setEnabled ? 1 : 0,
                     $featuredHome ? 1 : 0,
                     $setPrice,
-                    $packEnabled ? 1 : 0,
-                    $packQuantity,
-                    $packPrice,
                     $setStatus,
                     (int) $photo["set_id"],
                 ]);
             } else {
                 $db->prepare(
-                    "UPDATE photo_sets SET event_id=?,category_id=?,name=?,bib_number=?,individual_enabled=?,set_enabled=?,set_price=?,pack_enabled=?,pack_quantity=?,pack_price=?,status=? WHERE id=?",
+                    "UPDATE photo_sets SET event_id=?,category_id=?,name=?,bib_number=?,individual_enabled=?,set_enabled=?,set_price=?,status=? WHERE id=?",
                 )->execute([
                     $event,
                     $categoryId ?: null,
@@ -599,9 +538,6 @@ final class AdminController
                     $individual ? 1 : 0,
                     $setEnabled ? 1 : 0,
                     $setPrice,
-                    $packEnabled ? 1 : 0,
-                    $packQuantity,
-                    $packPrice,
                     $setStatus,
                     (int) $photo["set_id"],
                 ]);
@@ -773,7 +709,7 @@ final class AdminController
         $db = Database::db();
         $marks = implode(",", array_fill(0, count($ids), "?"));
         $s = $db->prepare(
-            "SELECT p.*,EXISTS(SELECT 1 FROM order_items oi WHERE oi.photo_id=p.id OR (oi.set_id=p.set_id AND oi.item_type IN ('set','pack'))) has_sales FROM photos p WHERE p.set_id=? AND p.id IN ($marks)",
+            "SELECT p.*,EXISTS(SELECT 1 FROM order_items oi WHERE oi.photo_id=p.id OR (oi.set_id=p.set_id AND oi.item_type='set')) has_sales FROM photos p WHERE p.set_id=? AND p.id IN ($marks)",
         );
         $s->execute(array_merge([$setId], $ids));
         $rows = $s->fetchAll();

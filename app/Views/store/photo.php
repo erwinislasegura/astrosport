@@ -10,6 +10,7 @@ $bibNumber = trim((string)($photo['bib_number'] ?? ''));
 <?php unset($_SESSION['error']); endif; ?>
 
 <section class="editorial-detail">
+ <style>.editorial-detail{width:calc(100% - 12px)!important;max-width:none!important}.editorial-photo-meta,.editorial-photo-meta b,.editorial-photo-meta small,.editorial-photo-actions a,.editorial-photo-actions button{color:#fff!important}.editorial-photo-actions button svg,.editorial-photo-actions button i{color:#fff!important;fill:#fff!important;stroke:#fff!important}.editorial-photo-actions button[data-cart-photo].selected{background:rgba(8,11,16,.78)!important}</style>
  <header class="editorial-set-head">
   <div>
    <h1><?= htmlspecialchars($setTitle) ?></h1>

@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="<?= url('assets/admin-dashboard.css') ?>">
     <?php if ($section === 'photos'): ?>
         <link rel="stylesheet" href="<?= url('assets/admin-upload.css') ?>">
-        <link rel="stylesheet" href="<?= url('assets/admin-packs.css') ?>">
         <link rel="stylesheet" href="<?= url('assets/admin-set-gallery.css') ?>">
         <link rel="stylesheet" href="<?= url('assets/admin-watermark.css') ?>">
     <?php endif; ?>

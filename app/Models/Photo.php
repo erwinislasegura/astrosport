@@ -7,7 +7,7 @@ final class Photo
 {
     private static function select(): string
     {
-        return "SELECT p.*,e.name event_name,e.event_date,COALESCE(ps.individual_enabled,1) individual_enabled,COALESCE(ps.set_enabled,0) set_enabled,COALESCE(ps.pack_enabled,0) pack_enabled,ps.pack_quantity,ps.pack_price,ps.set_price,ps.name set_name,ps.category_id,c.name category_name,c.slug category_slug FROM photos p JOIN events e ON e.id=p.event_id LEFT JOIN photo_sets ps ON ps.id=p.set_id LEFT JOIN categories c ON c.id=ps.category_id";
+        return "SELECT p.*,e.name event_name,e.event_date,COALESCE(ps.individual_enabled,1) individual_enabled,COALESCE(ps.set_enabled,0) set_enabled,ps.set_price,ps.name set_name,ps.category_id,c.name category_name,c.slug category_slug FROM photos p JOIN events e ON e.id=p.event_id LEFT JOIN photo_sets ps ON ps.id=p.set_id LEFT JOIN categories c ON c.id=ps.category_id";
     }
 
     private static function publicWhere(): string
