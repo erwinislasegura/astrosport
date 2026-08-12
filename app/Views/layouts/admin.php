@@ -37,6 +37,7 @@
     <link rel="stylesheet" href="<?= url('assets/ui-fixes.css') ?>">
     <link rel="stylesheet" href="<?= url('assets/admin-mobile.css') ?>">
     <link rel="stylesheet" href="<?= url('assets/astrosport-theme.css') ?>">
+    <link rel="stylesheet" href="<?= url('assets/admin-system.css') ?>">
 </head>
 <body>
     <aside class="sidebar" id="sidebar" aria-label="Navegación del panel">
@@ -51,7 +52,6 @@
             <a class="<?= $section === 'events' ? 'active' : '' ?>" href="<?= url('admin/eventos') ?>"><i>◫</i> Eventos</a>
             <a class="<?= $section === 'categories' ? 'active' : '' ?>" href="<?= url('admin/categorias') ?>"><i>≡</i> Categorías</a>
             <a class="<?= $section === 'photos' ? 'active' : '' ?>" href="<?= url('admin/fotos') ?>"><i>↑</i> Subir fotografías</a>
-            <a href="#"><i>▧</i> Galerías</a>
             <a class="<?= $section === 'orders' ? 'active' : '' ?>" href="<?= url('admin/pedidos') ?>"><i>◇</i> Pedidos</a>
 
             <small>CONFIGURACIÓN</small>
@@ -60,7 +60,6 @@
             <a class="<?= $section === 'flow' ? 'active' : '' ?>" href="<?= url('admin/flow') ?>"><i>◇</i> Pasarela Flow</a>
             <a class="<?= $section === 'email' ? 'active' : '' ?>" href="<?= url('admin/correo') ?>"><i>@</i> Correo SMTP</a>
             <a class="<?= $section === 'users' ? 'active' : '' ?>" href="<?= url('admin/usuarios') ?>"><i>◎</i> Usuarios y roles</a>
-            <a href="#"><i>⚙</i> Ajustes</a>
         </nav>
         <div class="user">
             <span><?= strtoupper(substr(admin_user()['name'] ?? 'A', 0, 2)) ?></span>
