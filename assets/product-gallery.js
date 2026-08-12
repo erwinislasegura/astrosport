@@ -119,7 +119,20 @@
   const checkbox=label?.querySelector('input[type="checkbox"]');
   const render=()=>button.classList.toggle('selected',Boolean(checkbox?.checked));
   render();
-  button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();if(!checkbox)return;checkbox.checked=!checkbox.checked;checkbox.dispatchEvent(new Event('change',{bubbles:true}));render();});
+  button.addEventListener('click',event=>{
+   event.preventDefault();event.stopPropagation();if(!checkbox||button.disabled)return;
+   button.disabled=true;
+   const sourceForm=button.closest('form');
+   const form=document.createElement('form');
+   form.method='post';
+   form.action=(sourceForm?.action||'').replace(/carrito\/agregar-seleccion.*$/,'carrito/agregar');
+   const fields={_token:sourceForm?.querySelector('[name="_token"]')?.value||'',type:'photo',id:checkbox.value};
+   Object.entries(fields).forEach(([name,value])=>{const input=document.createElement('input');input.type='hidden';input.name=name;input.value=value;form.appendChild(input);});
+   document.body.appendChild(form);
+   checkbox.checked=true;checkbox.dispatchEvent(new Event('change',{bubbles:true}));render();
+   form.requestSubmit();
+   setTimeout(()=>{form.remove();button.disabled=false;},900);
+  });
   checkbox?.addEventListener('change',render);
  });
  document.querySelectorAll('.editorial-photo-actions a').forEach(link=>link.addEventListener('click',event=>event.stopPropagation()));

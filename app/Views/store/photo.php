@@ -18,7 +18,7 @@ $bibNumber = trim((string)($photo['bib_number'] ?? ''));
 
  <div class="editorial-toolbar">
   <p><?= $photoCount ?> <?= $photoLabel ?> en alta resolución<?php if ($bibNumber !== ''): ?> · Competidor #<?= htmlspecialchars($bibNumber) ?><?php endif; ?></p>
-  <div class="editorial-view-buttons" aria-label="Cambiar presentación"><button class="active" type="button" data-gallery-view="mosaic" aria-label="Vista mosaico">▦</button><button type="button" data-gallery-view="grid" aria-label="Vista cuadrícula">▦</button></div>
+  <div class="editorial-view-buttons" aria-label="Cambiar presentación"><button class="active" type="button" data-gallery-view="mosaic" aria-label="Vista mosaico" title="Vista mosaico">▦</button><button type="button" data-gallery-view="list" aria-label="Vista lista" title="Vista lista">☷</button></div>
  </div>
 
  <div class="editorial-gallery" data-editorial-gallery>
@@ -38,6 +38,6 @@ $bibNumber = trim((string)($photo['bib_number'] ?? ''));
 document.querySelectorAll('[data-gallery-view]').forEach(button=>button.addEventListener('click',()=>{
  const gallery=document.querySelector('[data-editorial-gallery]');
  document.querySelectorAll('[data-gallery-view]').forEach(item=>item.classList.toggle('active',item===button));
- gallery?.classList.toggle('is-grid',button.dataset.galleryView==='grid');
+ gallery?.classList.toggle('is-list',button.dataset.galleryView==='list');
 }));
 </script>
