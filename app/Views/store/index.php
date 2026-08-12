@@ -6,7 +6,7 @@ $heroBackground=preg_match('~^https?://~i',(string)$hero['background_url'])?$her
 ?>
 <section class="reference-hero" id="inicio" style="--hero-image:url('<?=htmlspecialchars($heroBackground)?>')">
  <video class="reference-hero-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true"><source src="<?=url('assets/hero-fluid.mp4')?>" type="video/mp4"></video>
- <iframe class="reference-hero-youtube" src="https://www.youtube-nocookie.com/embed/1MieluM0c6c?autoplay=1&amp;mute=1&amp;controls=0&amp;loop=1&amp;playlist=1MieluM0c6c&amp;playsinline=1&amp;rel=0&amp;modestbranding=1&amp;disablekb=1" title="Video de fondo AstroSport" allow="autoplay; encrypted-media" tabindex="-1" aria-hidden="true"></iframe>
+ <iframe class="reference-hero-youtube" src="https://www.youtube-nocookie.com/embed/1MieluM0c6c?autoplay=1&amp;mute=1&amp;controls=0&amp;loop=1&amp;playlist=1MieluM0c6c&amp;start=30&amp;playsinline=1&amp;rel=0&amp;modestbranding=1&amp;disablekb=1&amp;fs=0&amp;iv_load_policy=3&amp;cc_load_policy=0" title="Video de fondo AstroSport" allow="autoplay; encrypted-media" tabindex="-1" aria-hidden="true"></iframe>
  <div class="reference-shade"></div><div class="reference-hero-copy"><span class="reference-eyebrow"><?=htmlspecialchars($hero['eyebrow'])?></span><h1><?=htmlspecialchars($heroTitle)?></h1><p><?=htmlspecialchars($hero['description'])?></p>
  <form class="reference-search" action="<?=url()?>" method="get"><span aria-hidden="true">⌕</span><input name="q" value="<?=htmlspecialchars($_GET['q']??'')?>" placeholder="<?=htmlspecialchars($hero['search_placeholder'])?>"><button><?=htmlspecialchars($hero['button_text'])?></button></form></div>
 </section>
