@@ -28,6 +28,27 @@ $bibNumber = trim((string)($photo['bib_number'] ?? ''));
   <?php require ROOT.'/app/Views/partials/product_selection.php';?>
  </div>
 
+ <div class="photo-lightbox" data-photo-lightbox hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="photoLightboxTitle">
+  <button class="photo-lightbox-backdrop" type="button" data-lightbox-close aria-label="Cerrar vista ampliada"></button>
+  <section class="photo-lightbox-dialog" role="document">
+   <header class="photo-lightbox-header">
+    <div><span>VISTA PREVIA PROTEGIDA</span><strong data-lightbox-counter>FOTO 1 DE <?=$photoCount?></strong></div>
+    <button type="button" data-lightbox-close aria-label="Cerrar vista ampliada">×</button>
+   </header>
+   <div class="photo-lightbox-stage" data-lightbox-protected>
+    <button class="photo-lightbox-nav previous" type="button" data-lightbox-previous aria-label="Fotografía anterior">‹</button>
+    <figure>
+     <img data-lightbox-image src="" alt="" draggable="false">
+     <span class="photo-lightbox-watermark" aria-hidden="true">ASTROSPORT</span>
+     <span class="photo-lightbox-shield" aria-hidden="true"></span>
+     <figcaption><strong id="photoLightboxTitle" data-lightbox-title></strong><small data-lightbox-meta></small></figcaption>
+    </figure>
+    <button class="photo-lightbox-nav next" type="button" data-lightbox-next aria-label="Fotografía siguiente">›</button>
+   </div>
+   <footer class="photo-lightbox-footer"><span><i aria-hidden="true">◆</i> Vista previa con marca de agua</span><small>El archivo original se entrega únicamente después de validar la compra.</small></footer>
+  </section>
+ </div>
+
  <?php if($photo['set_id']&&!empty($photo['set_enabled'])):?>
  <div class="editorial-set-buy" id="compra-set">
   <div><span>COLECCIÓN COMPLETA</span><h2>DESCARGA TODO EL SET</h2><p><?=count($related)?> fotografías originales, sin marca de agua y reunidas en un archivo ZIP.</p></div>

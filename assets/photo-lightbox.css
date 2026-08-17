@@ -1,0 +1,61 @@
+body.photo-lightbox-open{overflow:hidden}
+.editorial-photo-actions .editorial-photo-expand{display:inline-flex!important;align-items:center;gap:6px}
+.editorial-photo-expand svg{width:14px;height:14px;fill:none!important;stroke:currentColor!important;stroke-width:1.8}
+.editorial-photo-frame>img,.photo-lightbox img{-webkit-user-drag:none;user-select:none;-webkit-user-select:none}
+.editorial-photo-frame>img{cursor:zoom-in}
+.photo-page .editorial-photo-frame:before{content:"ASTROSPORT";position:absolute;z-index:2;top:50%;left:50%;color:rgba(255,255,255,.22);font:900 clamp(26px,4vw,58px)/1 "Barlow Condensed",Inter,sans-serif;letter-spacing:.03em;text-shadow:0 1px 8px rgba(0,0,0,.2);transform:translate(-50%,-50%) rotate(-12deg);white-space:nowrap;pointer-events:none;user-select:none}
+.photo-lightbox[hidden]{display:none!important}
+.photo-lightbox{position:fixed;z-index:1000;inset:0;display:grid;place-items:center;padding:22px;background:rgba(4,5,9,.84);opacity:0;transition:opacity .2s ease}
+.photo-lightbox.is-open{opacity:1}
+.photo-lightbox-backdrop{position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;background:transparent;cursor:zoom-out}
+.photo-lightbox-dialog{position:relative;z-index:1;display:grid;grid-template-rows:auto minmax(0,1fr) auto;width:min(1480px,96vw);height:min(92vh,980px);overflow:hidden;border:1px solid rgba(255,255,255,.15);background:#090b10;color:#fff;box-shadow:0 35px 90px rgba(0,0,0,.55);transform:translateY(12px) scale(.985);transition:transform .22s ease}
+.photo-lightbox.is-open .photo-lightbox-dialog{transform:none}
+.photo-lightbox-header,.photo-lightbox-footer{position:relative;z-index:4;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:13px 18px;border-color:rgba(255,255,255,.12);background:#101218}
+.photo-lightbox-header{border-bottom:1px solid rgba(255,255,255,.12)}
+.photo-lightbox-header>div span,.photo-lightbox-header>div strong{display:block}
+.photo-lightbox-header>div span{margin-bottom:4px;color:#b99cff;font:700 8px/1.2 Inter,sans-serif;letter-spacing:.14em}
+.photo-lightbox-header>div strong{font:600 10px/1.2 Inter,sans-serif;letter-spacing:.08em}
+.photo-lightbox-header>button{display:grid;place-items:center;width:42px;height:42px;padding:0;border:1px solid rgba(255,255,255,.25);background:transparent;color:#fff;font:300 30px/1 Inter,sans-serif}
+.photo-lightbox-header>button:hover{background:#fff;color:#111217}
+.photo-lightbox-stage{position:relative;display:grid;grid-template-columns:58px minmax(0,1fr) 58px;min-height:0;background:radial-gradient(circle at 50% 42%,#222632,#0a0c11 68%);user-select:none}
+.photo-lightbox-stage figure{position:relative;display:grid;place-items:center;min-width:0;min-height:0;margin:0;overflow:hidden}
+.photo-lightbox-stage figure>img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;pointer-events:none}
+.photo-lightbox-stage figure>figcaption{position:absolute;z-index:4;right:18px;bottom:17px;left:18px;padding:12px 14px;background:rgba(7,9,14,.78);backdrop-filter:blur(9px);pointer-events:none}
+.photo-lightbox-stage figcaption strong,.photo-lightbox-stage figcaption small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.photo-lightbox-stage figcaption strong{font:600 13px/1.3 Inter,sans-serif}
+.photo-lightbox-stage figcaption small{margin-top:4px;color:#c1c4cd;font:500 9px/1.3 Inter,sans-serif}
+.photo-lightbox-watermark{position:absolute;z-index:2;top:50%;left:50%;color:rgba(255,255,255,.2);font:900 clamp(46px,9vw,132px)/1 "Barlow Condensed",Inter,sans-serif;letter-spacing:.035em;text-shadow:0 2px 12px rgba(0,0,0,.22);transform:translate(-50%,-50%) rotate(-12deg);white-space:nowrap;pointer-events:none;user-select:none}
+.photo-lightbox-shield{position:absolute;z-index:3;inset:0;pointer-events:auto;cursor:default}
+.photo-lightbox-nav{position:relative;z-index:5;align-self:center;display:grid;place-items:center;width:44px;height:64px;margin:auto;padding:0;border:1px solid rgba(255,255,255,.2);background:rgba(15,17,23,.8);color:#fff;font:300 36px/1 Inter,sans-serif}
+.photo-lightbox-nav:hover{border-color:#9c72ff;background:#7c3aed}
+.photo-lightbox-nav:disabled{visibility:hidden}
+.photo-lightbox-footer{border-top:1px solid rgba(255,255,255,.12);color:#d7d9df}
+.photo-lightbox-footer span{font:600 9px/1.4 Inter,sans-serif;letter-spacing:.04em;text-transform:uppercase}
+.photo-lightbox-footer span i{margin-right:7px;color:#9c72ff;font-size:8px}
+.photo-lightbox-footer small{color:#9a9ea8;font:500 8px/1.4 Inter,sans-serif}
+@media(max-width:700px){
+ .photo-lightbox{padding:0}
+ .photo-lightbox-dialog{width:100vw;height:100dvh;max-height:none;border:0}
+ .photo-lightbox-header{padding:10px 12px}
+ .photo-lightbox-header>button{width:44px;height:44px}
+ .photo-lightbox-stage{grid-template-columns:46px minmax(0,1fr) 46px}
+ .photo-lightbox-nav{width:38px;height:54px;font-size:30px}
+ .photo-lightbox-stage figure>figcaption{right:8px;bottom:8px;left:8px;padding:10px 11px}
+ .photo-lightbox-watermark{font-size:clamp(40px,16vw,76px)}
+ .photo-lightbox-footer{align-items:flex-start;flex-direction:column;gap:4px;padding:11px 13px}
+ .editorial-photo-actions .editorial-photo-expand span{display:none}
+ .editorial-photo-actions .editorial-photo-expand{width:44px!important;min-width:44px!important;padding:0!important;justify-content:center}
+ .editorial-photo-expand svg{width:17px;height:17px}
+ .photo-page .editorial-photo-actions{grid-template-columns:minmax(0,1fr) 44px auto auto!important}
+ .photo-page .editorial-photo-actions button[data-save-photo]{min-width:72px!important}
+ .photo-page .editorial-photo-actions button[data-cart-photo]{min-width:76px!important}
+}
+@media(max-width:380px){
+ .photo-page .editorial-photo-actions{grid-template-columns:minmax(0,1fr) 40px auto auto!important;gap:4px!important}
+ .photo-page .editorial-photo-actions a{padding-inline:7px!important;font-size:7.5px!important}
+ .photo-page .editorial-photo-actions button[data-save-photo]{min-width:62px!important;padding-inline:6px!important}
+ .photo-page .editorial-photo-actions button[data-cart-photo]{min-width:66px!important;padding-inline:6px!important}
+ .editorial-photo-actions .editorial-photo-expand{width:40px!important;min-width:40px!important}
+}
+@media(prefers-reduced-motion:reduce){.photo-lightbox,.photo-lightbox-dialog{transition:none}}
+@media print{.photo-lightbox,.photo-lightbox *{display:none!important}}
