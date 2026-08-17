@@ -7,11 +7,11 @@ Sistema de venta y entrega de fotografías deportivas desarrollado en PHP 8.1+, 
 - Portada dinámica con hero, búsqueda, eventos y galerías destacadas.
 - Catálogo por eventos, sets, dorsales y fotografías individuales.
 - Compra individual, tres combos configurables por cantidad o set completo.
-- Carrito lateral, checkout e integración con Flow Sandbox/Producción.
+- Carrito lateral y checkout con selección entre Flow y Transbank Webpay Plus.
 - Registro opcional en checkout y portal de clientes con pedidos y cambio de contraseña.
 - Descarga protegida de originales y ZIP, habilitada solo tras confirmar el pago.
 - Marca de agua de texto o imagen y bloqueo de originales.
-- Panel MVC para dashboard, pedidos, eventos, lotes, usuarios, roles, CTA, hero, correo SMTP y Flow.
+- Panel MVC para dashboard, pedidos, eventos, lotes, usuarios, roles, CTA, hero, correo SMTP, Flow y Transbank.
 - Diseño responsive, con dos columnas de productos en celulares.
 
 ## Instalación nueva
@@ -36,5 +36,9 @@ Sistema de venta y entrega de fotografías deportivas desarrollado en PHP 8.1+, 
 ## Flow
 
 Configura primero `APP_URL` con la URL HTTPS pública. En el panel abre **Pasarela Flow**, selecciona Sandbox o Producción y registra la API Key y Secret Key. Flow no puede confirmar pagos contra `localhost`.
+
+## Transbank Webpay Plus
+
+En el panel abre **Transbank Webpay**, selecciona Integración o Producción e ingresa `Tbk-Api-Key-Id` y `Tbk-Api-Key-Secret`. La llave se almacena cifrada y no se incluye en el repositorio. Para Producción, `APP_URL` debe apuntar al dominio público HTTPS; el retorno se procesa en `/pago/transbank/retorno` mediante la API REST 1.2.
 
 El archivo `index.html` se conserva como referencia visual. Apache usa `index.php` como portada mediante `DirectoryIndex`, para que el contenido provenga de MySQL y del panel administrativo.

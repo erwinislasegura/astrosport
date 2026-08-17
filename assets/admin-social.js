@@ -1,0 +1,1 @@
+(()=>{const form=document.querySelector('.social-settings-form'),preview=form?.querySelector('.whatsapp-admin-preview strong'),label=form?.querySelector('[name="whatsapp_label"]');if(!form||!preview||!label)return;const update=()=>preview.textContent=label.value.trim()||'¿Necesitas ayuda?';label.addEventListener('input',update);update()})();

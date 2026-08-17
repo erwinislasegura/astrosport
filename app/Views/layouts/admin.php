@@ -22,11 +22,17 @@
     <?php if ($section === 'categories'): ?>
         <link rel="stylesheet" href="<?= url('assets/admin-categories.css') ?>">
     <?php endif; ?>
-    <?php if (in_array($section, ['flow', 'email'], true)): ?>
+    <?php if (in_array($section, ['flow', 'transbank', 'email'], true)): ?>
         <link rel="stylesheet" href="<?= url('assets/admin-flow.css') ?>">
+    <?php endif; ?>
+    <?php if ($section === 'transbank'): ?>
+        <link rel="stylesheet" href="<?= url('assets/admin-transbank.css') ?>">
     <?php endif; ?>
     <?php if ($section === 'email'): ?>
         <link rel="stylesheet" href="<?= url('assets/admin-email.css') ?>">
+    <?php endif; ?>
+    <?php if ($section === 'social'): ?>
+        <link rel="stylesheet" href="<?= url('assets/admin-social.css') ?>">
     <?php endif; ?>
     <?php if ($section === 'hero'): ?>
         <link rel="stylesheet" href="<?= url('assets/admin-hero.css') ?>">
@@ -59,7 +65,9 @@
             <a class="<?= $section === 'hero' ? 'active' : '' ?>" href="<?= url('admin/hero') ?>"><i>▣</i> Hero de portada</a>
             <a class="<?= $section === 'cta' ? 'active' : '' ?>" href="<?= url('admin/cta') ?>"><i>★</i> CTA de portada</a>
             <a class="<?= $section === 'flow' ? 'active' : '' ?>" href="<?= url('admin/flow') ?>"><i>◇</i> Pasarela Flow</a>
+            <a class="<?= $section === 'transbank' ? 'active' : '' ?>" href="<?= url('admin/transbank') ?>"><i>▰</i> Transbank Webpay</a>
             <a class="<?= $section === 'email' ? 'active' : '' ?>" href="<?= url('admin/correo') ?>"><i>@</i> Correo SMTP</a>
+            <a class="<?= $section === 'social' ? 'active' : '' ?>" href="<?= url('admin/redes-sociales') ?>"><i>◎</i> Redes sociales</a>
             <a class="<?= $section === 'users' ? 'active' : '' ?>" href="<?= url('admin/usuarios') ?>"><i>◎</i> Usuarios y roles</a>
         </nav>
         <div class="user">
@@ -113,6 +121,9 @@
     <?php endif; ?>
     <?php if ($section === 'cta'): ?>
         <script src="<?= url('assets/admin-cta.js') ?>"></script>
+    <?php endif; ?>
+    <?php if ($section === 'social'): ?>
+        <script src="<?= url('assets/admin-social.js') ?>"></script>
     <?php endif; ?>
 </body>
 </html>

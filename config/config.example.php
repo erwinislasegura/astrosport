@@ -15,5 +15,11 @@ return [
   'http_timeout'=>10,
   'order_timeout'=>1800,
  ],
+ 'transbank'=>[
+  'commerce_code'=>'TU_TBK_API_KEY_ID',
+  'api_key_secret'=>'TU_TBK_API_KEY_SECRET',
+  'environment'=>'sandbox', // Producción: production
+  'http_timeout'=>15,
+ ],
  'demo_admin'=>true,
 ];
