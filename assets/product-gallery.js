@@ -1,4 +1,8 @@
 (()=>{
+ const purchaseStyles=document.createElement('link');
+ purchaseStyles.rel='stylesheet';
+ purchaseStyles.href=(document.querySelector('link[href*="product-gallery.css"]')?.href||'').replace('product-gallery.css','purchase-flow-fixes.css');
+ if(purchaseStyles.href)document.head.appendChild(purchaseStyles);
  document.querySelectorAll('[data-product-slider]').forEach((slider,index)=>{
   const images=[...slider.querySelectorAll('img')];
   if(images.length<2)return;
