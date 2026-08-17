@@ -18,7 +18,7 @@ $editorialDate = !empty($photo['event_date']) ? date('d/m/Y', strtotime($photo['
  <div class="purchase-mode-heading"><span><small>ELIGE CÓMO COMPRAR</small><strong>LA MEJOR FORMA DE LLEVAR TUS FOTOS</strong></span><p>Selecciona una opción y luego marca las fotografías que quieras incluir.</p></div>
  <div class="purchase-mode-grid">
   <?php if ($individualEnabled): ?><button class="purchase-mode-card active" type="button" data-purchase-mode="individual"><span>01</span><b>FOTO INDIVIDUAL</b><small>Compra solo las fotografías que selecciones.</small><strong>Desde <?=money((int)$photo['price'])?></strong></button><?php endif; ?>
-  <div class="purchase-mode-card combo-card <?=$individualEnabled?'':'active'?>"><span>02</span><b>COMBOS</b><small>Elige uno de los tres combos configurados.</small><strong>AHORRA POR CANTIDAD</strong></div>
+  <button class="purchase-mode-card combo-card <?=$individualEnabled?'':'active'?>" type="button" data-combo-mode aria-pressed="<?=$individualEnabled?'false':'true'?>"><span>02</span><b>COMBOS</b><small>Elige una cantidad y selecciona tus fotos.</small><strong>AHORRA POR CANTIDAD</strong></button>
   <?php if ($setEnabled): ?><button class="purchase-mode-card" type="button" data-purchase-mode="set" data-set-price="<?=(int)$photo['set_price']?>"><span>03</span><b>SET COMPLETO</b><small>Lleva las <?=count($related)?> fotografías disponibles.</small><strong><?=money((int)$photo['set_price'])?></strong></button><?php endif; ?>
  </div>
  <div class="pack-selector-summary"><span><small>SELECCIÓN ACTUAL</small><strong>ELIGE TUS FOTOGRAFÍAS</strong></span><strong class="smart-total"><?=money((int)$photo['price'])?></strong></div>
