@@ -101,3 +101,36 @@
 @media(prefers-reduced-motion:reduce){
  .product-detail .detail-img>img.preview-swap,.photo-selector label,.photo-selector label>span img{animation:none;transition:none}
 }
+
+/* Selector explícito para foto individual, combos y set completo. */
+.purchase-mode-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:12px;padding:19px 20px;border:1px solid #d7dce5;background:#f6f8fb}
+.purchase-mode-heading span>small,.purchase-mode-heading span>strong{display:block}
+.purchase-mode-heading span>small{color:#2563eb;font-size:10px;font-weight:800;letter-spacing:.12em}
+.purchase-mode-heading span>strong{margin-top:5px;color:#142033;font:800 22px/1.05 "Barlow Condensed",Inter,sans-serif}
+.purchase-mode-heading p{max-width:430px;margin:0;color:#657186;font-size:12px;line-height:1.5;text-align:right}
+.purchase-mode-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:10px}
+.purchase-mode-card{position:relative;display:grid;min-height:138px;align-content:start;gap:5px;padding:16px!important;border:1px solid #ccd5e1!important;border-radius:7px!important;background:#fff!important;color:#17243a!important;text-align:left!important;cursor:pointer}
+button.purchase-mode-card:hover,button.purchase-mode-card.active,.purchase-mode-card.combo-card.active{border-color:#2563eb!important;background:#eff5ff!important;box-shadow:inset 0 0 0 1px #2563eb}
+.purchase-mode-card>span{display:grid;width:29px;height:29px;place-items:center;margin-bottom:3px;border-radius:5px;background:#e9eef5;color:#526179;font-size:10px;font-weight:800}
+.purchase-mode-card.active>span,.purchase-mode-card.combo-card.active>span{background:#2563eb;color:#fff}
+.purchase-mode-card>b{font-size:13px;font-weight:800;letter-spacing:.025em}
+.purchase-mode-card>small{color:#6b7688;font-size:11px;line-height:1.4}
+.purchase-mode-card>strong{margin-top:auto;color:#2563eb;font-size:12px;font-weight:800}
+.purchase-mode-card.combo-card{cursor:default}
+.pack-purchase-panel .available-packs>button{display:block;min-width:0;padding:13px 14px;border:1px solid #d7d7df;border-radius:7px;background:#fff;color:#17171d;text-align:center;cursor:pointer}
+.pack-purchase-panel .available-packs>button small,.pack-purchase-panel .available-packs>button b,.pack-purchase-panel .available-packs>button strong{display:block}
+.pack-purchase-panel .available-packs>button small{color:#73747d;font-size:10px;font-weight:700}
+.pack-purchase-panel .available-packs>button b{margin:4px 0;color:#17171d;font:800 18px/1 Inter,sans-serif}
+.pack-purchase-panel .available-packs>button strong{color:#5b21b6;font-size:13px}
+.pack-purchase-panel .available-packs>button:hover,.pack-purchase-panel .available-packs>button.active{border-color:#7c3aed;background:#7c3aed;color:#fff}
+.pack-purchase-panel .available-packs>button.active small,.pack-purchase-panel .available-packs>button.active b,.pack-purchase-panel .available-packs>button.active strong{color:#fff}
+.smart-mode.set-active{background:#0f9d8f;color:#fff}
+.smart-help{font-size:11px!important;line-height:1.5!important}
+
+@media(max-width:760px){
+ .purchase-mode-heading{align-items:flex-start;flex-direction:column;gap:8px;padding:16px}
+ .purchase-mode-heading p{text-align:left}
+ .purchase-mode-grid{grid-template-columns:1fr}
+ .purchase-mode-card{min-height:112px}
+ .pack-purchase-panel .available-packs>button{flex:0 0 155px}
+}

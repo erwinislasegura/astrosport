@@ -2,6 +2,9 @@
 $packOptions = !empty($photo['set_id']) ? \App\Models\PhotoPack::forSet((int) $photo['set_id']) : [];
 $hasCombos = !empty($packOptions);
 $individualEnabled = !empty($photo['individual_enabled']);
+$setEnabled = !empty($photo['set_enabled']);
+$defaultMode = $individualEnabled ? 'individual' : 'pack';
+$defaultPackQuantity = (int)($packOptions[0]['quantity'] ?? 0);
 $similarUrl = !empty($photo['category_slug']) ? url('?category='.rawurlencode($photo['category_slug']).'#fotos') : url('#fotos');
 $editorialDate = !empty($photo['event_date']) ? date('d/m/Y', strtotime($photo['event_date'])) : '';
 ?>
@@ -10,13 +13,21 @@ $editorialDate = !empty($photo['event_date']) ? date('d/m/Y', strtotime($photo['
  <input type="hidden" name="_token" value="<?=csrf()?>">
  <input type="hidden" name="set_id" value="<?=(int)$photo['set_id']?>">
  <input type="hidden" name="return_photo_id" value="<?=(int)$photo['id']?>">
- <div class="pack-selector-summary"><span><small>ARMA TU COMPRA</small><strong>ELIGE TUS FOTOGRAFÍAS</strong></span><strong class="smart-total"><?=money((int)$photo['price'])?></strong></div>
+ <input class="smart-purchase-mode" type="hidden" name="purchase_mode" value="<?=$defaultMode?>">
+ <input class="smart-pack-quantity" type="hidden" name="pack_quantity" value="<?=$defaultPackQuantity?>">
+ <div class="purchase-mode-heading"><span><small>ELIGE CÓMO COMPRAR</small><strong>LA MEJOR FORMA DE LLEVAR TUS FOTOS</strong></span><p>Selecciona una opción y luego marca las fotografías que quieras incluir.</p></div>
+ <div class="purchase-mode-grid">
+  <?php if ($individualEnabled): ?><button class="purchase-mode-card active" type="button" data-purchase-mode="individual"><span>01</span><b>FOTO INDIVIDUAL</b><small>Compra solo las fotografías que selecciones.</small><strong>Desde <?=money((int)$photo['price'])?></strong></button><?php endif; ?>
+  <div class="purchase-mode-card combo-card <?=$individualEnabled?'':'active'?>"><span>02</span><b>COMBOS</b><small>Elige uno de los tres combos configurados.</small><strong>AHORRA POR CANTIDAD</strong></div>
+  <?php if ($setEnabled): ?><button class="purchase-mode-card" type="button" data-purchase-mode="set" data-set-price="<?=(int)$photo['set_price']?>"><span>03</span><b>SET COMPLETO</b><small>Lleva las <?=count($related)?> fotografías disponibles.</small><strong><?=money((int)$photo['set_price'])?></strong></button><?php endif; ?>
+ </div>
+ <div class="pack-selector-summary"><span><small>SELECCIÓN ACTUAL</small><strong>ELIGE TUS FOTOGRAFÍAS</strong></span><strong class="smart-total"><?=money((int)$photo['price'])?></strong></div>
  <div class="available-packs">
   <?php foreach ($packOptions as $slot => $option): ?>
-  <div data-pack-quantity="<?=(int)$option['quantity']?>" data-pack-price="<?=(int)$option['price']?>"><small>COMBO <?=$slot+1?></small><b><?=(int)$option['quantity']?> FOTOS</b><strong><?=money((int)$option['price'])?></strong></div>
+  <button type="button" data-purchase-mode="pack" data-pack-quantity="<?=(int)$option['quantity']?>" data-pack-price="<?=(int)$option['price']?>"><small>COMBO <?=$slot+1?></small><b><?=(int)$option['quantity']?> FOTOS</b><strong><?=money((int)$option['price'])?></strong></button>
   <?php endforeach; ?>
  </div>
- <div class="pack-selection-status"><span><b class="smart-count">1</b> fotografía(s) seleccionada(s)</span><em class="smart-mode"><?=$individualEnabled?'VALOR INDIVIDUAL':'ELIGE UN COMBO'?></em></div>
+ <div class="pack-selection-status"><span><b class="smart-count">1</b> fotografía(s) seleccionada(s)</span><em class="smart-mode"><?=$individualEnabled?'COMPRA INDIVIDUAL':'ELIGE UN COMBO'?></em></div>
 <?php endif; ?>
 
 <div class="photo-selector editorial-photo-selector<?=$hasCombos?' smart-selector':''?>" data-photo-gallery data-cart-add-url="<?=url('carrito/agregar')?>" data-csrf="<?=csrf()?>">
@@ -36,6 +47,6 @@ $editorialDate = !empty($photo['event_date']) ? date('d/m/Y', strtotime($photo['
 </div>
 
 <?php if ($hasCombos): ?>
- <div class="pack-purchase-footer"><p><?=$individualEnabled?'Al alcanzar una cantidad configurada se aplicará automáticamente el precio del combo.':'Selecciona exactamente una de las cantidades disponibles para comprar.'?></p><button class="desktop-selection-submit" type="submit">AGREGAR SELECCIÓN AL CARRITO →</button></div>
+ <div class="pack-purchase-footer"><p class="smart-help"><?=$individualEnabled?'Puedes comprar las fotos seleccionadas individualmente o elegir uno de los combos disponibles.':'Selecciona uno de los combos y completa la cantidad indicada.'?></p><button class="desktop-selection-submit" type="submit">AGREGAR FOTOS INDIVIDUALES →</button></div>
 </form>
 <?php endif; ?>

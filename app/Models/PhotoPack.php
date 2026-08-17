@@ -38,28 +38,52 @@ final class PhotoPack
 
     public static function forSet(int $setId, bool $onlyActive = true): array
     {
-        if ($setId < 1 || !self::ensureSchema()) return [];
+        if ($setId < 1) return [];
+        if (!self::ensureSchema()) return self::legacyOptions($setId, $onlyActive);
         try {
             $sql = 'SELECT * FROM photo_pack_options WHERE set_id=?';
             if ($onlyActive) $sql .= ' AND active=1';
             $sql .= ' ORDER BY slot';
             $s = Database::db()->prepare($sql);
             $s->execute([$setId]);
-            return $s->fetchAll();
+            $options = $s->fetchAll();
+            return $options ?: self::legacyOptions($setId, $onlyActive);
         } catch (Throwable $e) {
-            return [];
+            return self::legacyOptions($setId, $onlyActive);
         }
     }
 
     public static function matching(int $setId, int $quantity): ?array
     {
-        if (!self::ensureSchema()) return null;
+        if ($setId < 1 || $quantity < 1) return null;
+        if (!self::ensureSchema()) {
+            $legacy = self::legacyOptions($setId);
+            return (int)($legacy[0]['quantity'] ?? 0) === $quantity ? $legacy[0] : null;
+        }
         try {
             $s = Database::db()->prepare('SELECT * FROM photo_pack_options WHERE set_id=? AND quantity=? AND active=1 ORDER BY slot LIMIT 1');
             $s->execute([$setId, $quantity]);
-            return $s->fetch() ?: null;
+            $option = $s->fetch();
+            if ($option) return $option;
+            $legacy = self::legacyOptions($setId);
+            return (int)($legacy[0]['quantity'] ?? 0) === $quantity ? $legacy[0] : null;
         } catch (Throwable $e) {
-            return null;
+            $legacy = self::legacyOptions($setId);
+            return (int)($legacy[0]['quantity'] ?? 0) === $quantity ? $legacy[0] : null;
+        }
+    }
+
+    private static function legacyOptions(int $setId, bool $onlyActive = true): array
+    {
+        try {
+            $s = Database::db()->prepare('SELECT id set_id,pack_enabled active,pack_quantity quantity,pack_price price FROM photo_sets WHERE id=? LIMIT 1');
+            $s->execute([$setId]);
+            $option = $s->fetch();
+            if (!$option || ($onlyActive && empty($option['active'])) || (int)$option['quantity'] < 1) return [];
+            $option['slot'] = 1;
+            return [$option];
+        } catch (Throwable $e) {
+            return [];
         }
     }
 

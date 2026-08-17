@@ -60,11 +60,33 @@
   const count=form.querySelector('.smart-count');
   const total=form.querySelector('.smart-total');
   const mode=form.querySelector('.smart-mode');
+  const help=form.querySelector('.smart-help');
   const submit=form.querySelector('.desktop-selection-submit');
+  const modeInput=form.querySelector('.smart-purchase-mode');
+  const quantityInput=form.querySelector('.smart-pack-quantity');
+
+  function selectedMode(){return modeInput?.value||'individual';}
+  function selectedPack(){
+   const quantity=Number(quantityInput?.value||0);
+   return packs.find(item=>item.quantity===quantity)||null;
+  }
+
+  function chooseMode(nextMode,pack=null){
+   if(modeInput)modeInput.value=nextMode;
+   if(quantityInput)quantityInput.value=pack?String(pack.quantity):'';
+   form.querySelectorAll('[data-purchase-mode]').forEach(node=>{
+    const active=node.dataset.purchaseMode===nextMode&&(nextMode!=='pack'||node===pack?.node);
+    node.classList.toggle('active',active);
+    if(node.tagName==='BUTTON')node.setAttribute('aria-pressed',active?'true':'false');
+   });
+   form.querySelector('.combo-card')?.classList.toggle('active',nextMode==='pack');
+   update();
+  }
 
   function update(){
    const selected=checks.filter(check=>check.checked);
-   const pack=packs.find(item=>item.quantity===selected.length);
+   const currentMode=selectedMode();
+   const pack=selectedPack();
    if(count)count.textContent=selected.length;
    checks.forEach(check=>{
     const card=check.closest('.photo-choice');
@@ -72,23 +94,36 @@
     card?.classList.toggle('is-selected',check.checked);
     if(toggle){toggle.classList.toggle('selected',check.checked);toggle.setAttribute('aria-pressed',check.checked?'true':'false');toggle.textContent=check.checked?'✓ SELECCIONADA':'＋ SELECCIONAR';}
    });
-   packs.forEach(item=>item.node.classList.toggle('active',item===pack));
-   if(pack){
+   packs.forEach(item=>item.node.classList.toggle('active',currentMode==='pack'&&item===pack));
+   if(currentMode==='set'){
+    const setOption=form.querySelector('[data-purchase-mode="set"]');
+    const setPrice=Number(setOption?.dataset.setPrice||0);
+    if(total)total.textContent=money(setPrice);
+    if(mode){mode.textContent='SET COMPLETO';mode.className='smart-mode set-active';}
+    if(help)help.textContent='Se agregarán todas las fotografías del set en una sola compra.';
+    if(submit){submit.disabled=false;submit.textContent='AGREGAR SET COMPLETO AL CARRITO →';}
+   }else if(currentMode==='pack'&&pack){
     if(total)total.textContent=money(pack.price);
-    if(mode){mode.textContent=`COMBO DE ${pack.quantity} ACTIVADO`;mode.className='smart-mode pack-active';}
-    if(submit){submit.disabled=false;submit.textContent=`AGREGAR COMBO DE ${pack.quantity} FOTOS →`;}
-   }else if(individual&&selected.length){
+    const complete=selected.length===pack.quantity;
+    if(mode){mode.textContent=complete?`COMBO DE ${pack.quantity} LISTO`:`FALTAN ${Math.max(0,pack.quantity-selected.length)} FOTOS`;mode.className=complete?'smart-mode pack-active':'smart-mode';}
+    if(help)help.textContent=`Selecciona exactamente ${pack.quantity} fotografías para completar este combo.`;
+    if(submit){submit.disabled=!complete;submit.textContent=complete?`AGREGAR COMBO DE ${pack.quantity} FOTOS →`:`SELECCIONA ${pack.quantity} FOTOGRAFÍAS`;}
+   }else if(currentMode==='individual'&&individual&&selected.length){
     const amount=selected.reduce((sum,check)=>sum+Number(check.dataset.price||0),0);
     if(total)total.textContent=money(amount);
-    if(mode){mode.textContent='VALOR INDIVIDUAL';mode.className='smart-mode';}
-    if(submit){submit.disabled=false;submit.textContent='AGREGAR SELECCIÓN AL CARRITO →';}
+    if(mode){mode.textContent='COMPRA INDIVIDUAL';mode.className='smart-mode';}
+    if(help)help.textContent='Cada fotografía seleccionada se agregará como un producto individual.';
+    if(submit){submit.disabled=false;submit.textContent=selected.length===1?'AGREGAR FOTO INDIVIDUAL →':`AGREGAR ${selected.length} FOTOS INDIVIDUALES →`;}
    }else{
     if(total)total.textContent='$0';
-    if(mode){mode.textContent=selected.length?'CANTIDAD SIN COMBO':'ELIGE TUS FOTOS';mode.className='smart-mode';}
-    if(submit){submit.disabled=true;submit.textContent='SELECCIONA UNA CANTIDAD DE COMBO';}
+    if(mode){mode.textContent='ELIGE TUS FOTOS';mode.className='smart-mode';}
+    if(submit){submit.disabled=true;submit.textContent='SELECCIONA AL MENOS UNA FOTO';}
    }
   }
 
+  form.querySelectorAll('[data-purchase-mode="individual"]').forEach(button=>button.addEventListener('click',()=>chooseMode('individual')));
+  form.querySelectorAll('[data-purchase-mode="set"]').forEach(button=>button.addEventListener('click',()=>chooseMode('set')));
+  packs.forEach(pack=>pack.node.addEventListener('click',()=>chooseMode('pack',pack)));
   form.querySelectorAll('[data-select-photo]').forEach(button=>button.addEventListener('click',event=>{
    event.preventDefault();event.stopPropagation();
    const check=button.closest('.photo-choice')?.querySelector('.photo-pack-check');
@@ -97,7 +132,8 @@
    check.dispatchEvent(new Event('change',{bubbles:true}));
   }));
   checks.forEach(check=>check.addEventListener('change',()=>{showPreview(check.closest('[data-preview-image]'));update();}));
-  update();
+  const initialPack=selectedMode()==='pack'?selectedPack():null;
+  chooseMode(selectedMode(),initialPack);
  });
 
  const savedKey='astrosport_saved_photos';

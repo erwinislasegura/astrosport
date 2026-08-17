@@ -58,23 +58,51 @@ final class CartController
         verify_csrf();
         $setId = (int) ($_POST['set_id'] ?? 0);
         $returnPhotoId = (int) ($_POST['return_photo_id'] ?? 0);
+        $mode = (string) ($_POST['purchase_mode'] ?? 'auto');
+        $packQuantity = (int) ($_POST['pack_quantity'] ?? 0);
         $ids = array_values(array_unique(array_filter(array_map('intval', (array) ($_POST['ids'] ?? [])))));
-        $photos = Photo::ids($ids);
         $set = PhotoSet::find($setId);
-        $valid = $set && $ids && count($photos) === count($ids);
-        foreach ($photos as $photo) if ((int) $photo['set_id'] !== $setId) $valid = false;
-        if (!$valid) {
-            $_SESSION['error'] = 'La selección de fotografías no es válida.';
-            redirect('/foto?id='.$returnPhotoId);
+
+        if (!$set) {
+            $this->selectionError('El set seleccionado no está disponible.', $returnPhotoId);
         }
-        $pack = PhotoPack::matching($setId, count($ids));
-        if ($pack) {
+
+        if ($mode === 'set') {
+            if (empty($set['set_enabled'])) {
+                $this->selectionError('La compra del set completo no está habilitada.', $returnPhotoId);
+            }
+            ShopCart::add('set', $setId);
+            if ($this->wantsJson()) $this->json();
+            redirect('/carrito');
+        }
+
+        $photos = Photo::ids($ids);
+        $validPhotos = $ids && count($photos) === count($ids);
+        foreach ($photos as $photo) {
+            if ((int) $photo['set_id'] !== $setId) $validPhotos = false;
+        }
+        if (!$validPhotos) {
+            $this->selectionError('Selecciona fotografías válidas del mismo set.', $returnPhotoId);
+        }
+
+        if ($mode === 'pack') {
+            $pack = PhotoPack::matching($setId, $packQuantity);
+            if (!$pack || count($ids) !== $packQuantity) {
+                $this->selectionError('Debes seleccionar exactamente '.$packQuantity.' fotografías para este combo.', $returnPhotoId);
+            }
             ShopCart::addPack($setId, $ids);
-        } elseif (!empty($set['individual_enabled'])) {
+        } elseif ($mode === 'individual') {
+            if (empty($set['individual_enabled'])) {
+                $this->selectionError('La compra de fotografías individuales no está habilitada.', $returnPhotoId);
+            }
             foreach ($ids as $id) ShopCart::add('photo', $id);
         } else {
-            $_SESSION['error'] = 'Selecciona una cantidad correspondiente a uno de los combos disponibles.';
-            redirect('/foto?id='.$returnPhotoId);
+            // Compatibilidad con formularios anteriores: un número exacto aplica combo;
+            // cualquier otra selección utiliza valor individual cuando está habilitado.
+            $pack = PhotoPack::matching($setId, count($ids));
+            if ($pack) ShopCart::addPack($setId, $ids);
+            elseif (!empty($set['individual_enabled'])) foreach ($ids as $id) ShopCart::add('photo', $id);
+            else $this->selectionError('Selecciona una cantidad correspondiente a un combo activo.', $returnPhotoId);
         }
         if ($this->wantsJson()) $this->json();
         redirect('/carrito');
@@ -93,7 +121,14 @@ final class CartController
         return str_contains($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json') || ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'XMLHttpRequest';
     }
 
-    private function json(bool $ok = true): never
+    private function selectionError(string $message, int $returnPhotoId): never
+    {
+        if ($this->wantsJson()) $this->json(false, $message);
+        $_SESSION['error'] = $message;
+        redirect('/foto?id='.$returnPhotoId);
+    }
+
+    private function json(bool $ok = true, ?string $error = null): never
     {
         $items = ShopCart::items();
         $result = [];
@@ -104,7 +139,7 @@ final class CartController
         $total = (int) array_sum(array_column($items, 'price'));
         header('Content-Type: application/json; charset=utf-8');
         header('Cache-Control: no-store');
-        echo json_encode(['ok' => $ok, 'count' => count($result), 'total' => $total, 'total_formatted' => money($total), 'items' => $result], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        echo json_encode(['ok' => $ok, 'error' => $error, 'count' => count($result), 'total' => $total, 'total_formatted' => money($total), 'items' => $result], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         exit;
     }
 }
