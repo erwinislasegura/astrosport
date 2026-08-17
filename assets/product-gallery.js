@@ -52,6 +52,54 @@
  const initialChoice=previewChoices.find(choice=>choice.classList.contains('is-viewing'))||previewChoices[0];
  if(initialChoice)showPreview(initialChoice);
 
+ const money=value=>'$'+new Intl.NumberFormat('es-CL').format(value);
+ document.querySelectorAll('.smart-photo-selection').forEach(form=>{
+  const checks=[...form.querySelectorAll('.photo-pack-check')];
+  const packs=[...form.querySelectorAll('[data-pack-quantity]')].map(node=>({node,quantity:Number(node.dataset.packQuantity),price:Number(node.dataset.packPrice)}));
+  const individual=form.dataset.individualEnabled==='1';
+  const count=form.querySelector('.smart-count');
+  const total=form.querySelector('.smart-total');
+  const mode=form.querySelector('.smart-mode');
+  const submit=form.querySelector('.desktop-selection-submit');
+
+  function update(){
+   const selected=checks.filter(check=>check.checked);
+   const pack=packs.find(item=>item.quantity===selected.length);
+   if(count)count.textContent=selected.length;
+   checks.forEach(check=>{
+    const card=check.closest('.photo-choice');
+    const toggle=card?.querySelector('[data-select-photo]');
+    card?.classList.toggle('is-selected',check.checked);
+    if(toggle){toggle.classList.toggle('selected',check.checked);toggle.setAttribute('aria-pressed',check.checked?'true':'false');toggle.textContent=check.checked?'✓ SELECCIONADA':'＋ SELECCIONAR';}
+   });
+   packs.forEach(item=>item.node.classList.toggle('active',item===pack));
+   if(pack){
+    if(total)total.textContent=money(pack.price);
+    if(mode){mode.textContent=`COMBO DE ${pack.quantity} ACTIVADO`;mode.className='smart-mode pack-active';}
+    if(submit){submit.disabled=false;submit.textContent=`AGREGAR COMBO DE ${pack.quantity} FOTOS →`;}
+   }else if(individual&&selected.length){
+    const amount=selected.reduce((sum,check)=>sum+Number(check.dataset.price||0),0);
+    if(total)total.textContent=money(amount);
+    if(mode){mode.textContent='VALOR INDIVIDUAL';mode.className='smart-mode';}
+    if(submit){submit.disabled=false;submit.textContent='AGREGAR SELECCIÓN AL CARRITO →';}
+   }else{
+    if(total)total.textContent='$0';
+    if(mode){mode.textContent=selected.length?'CANTIDAD SIN COMBO':'ELIGE TUS FOTOS';mode.className='smart-mode';}
+    if(submit){submit.disabled=true;submit.textContent='SELECCIONA UNA CANTIDAD DE COMBO';}
+   }
+  }
+
+  form.querySelectorAll('[data-select-photo]').forEach(button=>button.addEventListener('click',event=>{
+   event.preventDefault();event.stopPropagation();
+   const check=button.closest('.photo-choice')?.querySelector('.photo-pack-check');
+   if(!check)return;
+   check.checked=!check.checked;
+   check.dispatchEvent(new Event('change',{bubbles:true}));
+  }));
+  checks.forEach(check=>check.addEventListener('change',()=>{showPreview(check.closest('[data-preview-image]'));update();}));
+  update();
+ });
+
  const savedKey='astrosport_saved_photos';
  let saved=[];
  try{saved=JSON.parse(localStorage.getItem(savedKey)||'[]').map(String);}catch(error){saved=[];}

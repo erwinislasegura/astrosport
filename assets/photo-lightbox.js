@@ -63,7 +63,7 @@
    open(index);
   });
   card.addEventListener('keydown',event=>{
-   if(event.target===card&&event.key==='Enter'){
+   if(event.target===card&&event.key==='Enter'&&!card.querySelector('input[type="checkbox"]')){
     event.preventDefault();
     open(index);
    }

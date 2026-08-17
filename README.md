@@ -6,7 +6,7 @@ Sistema de venta y entrega de fotografías deportivas desarrollado en PHP 8.1+, 
 
 - Portada dinámica con hero, búsqueda, eventos y galerías destacadas.
 - Catálogo por eventos, sets, dorsales y fotografías individuales.
-- Compra individual inmediata o set completo.
+- Compra individual, tres combos configurables por cantidad o set completo.
 - Carrito lateral, checkout e integración con Flow Sandbox/Producción.
 - Registro opcional en checkout y portal de clientes con pedidos y cambio de contraseña.
 - Descarga protegida de originales y ZIP, habilitada solo tras confirmar el pago.

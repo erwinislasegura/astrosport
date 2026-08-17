@@ -96,6 +96,7 @@
                         <input name="set_price" type="number" min="0" value="19990">
                     </label>
                 </div>
+                <?php require ROOT.'/app/Views/partials/admin_pack_fields.php'; ?>
             </article>
         </section>
 
@@ -150,7 +151,7 @@
                             <td><b><?= $s['photos_count'] ?> fotos</b><small><?= $s['published_count'] ?> publicadas</small></td>
                             <td><b><?= money((int)$s['individual_price']) ?> c/u</b><small>Set: <?= money((int)$s['set_price']) ?></small></td>
                             <td><span class="table-status <?= $s['status'] ?>"><?= $s['status'] === 'active' ? 'PUBLICADO' : 'DESHABILITADO' ?></span></td>
-                            <td><small><?= $s['individual_enabled'] ? 'Individual' : '' ?><?= $s['set_enabled'] ? ' · Completo' : '' ?><?= ($s['featured_home'] ?? 0) ? ' · En inicio' : '' ?></small></td>
+                            <td><small><?= $s['individual_enabled'] ? 'Individual' : '' ?><?= ($s['pack_enabled'] ?? 0) ? ' · Combos' : '' ?><?= $s['set_enabled'] ? ' · Completo' : '' ?><?= ($s['featured_home'] ?? 0) ? ' · En inicio' : '' ?></small></td>
                             <td><div class="table-actions"><a class="btn btn-edit" href="<?= url('admin/fotos/editar?id=' . $s['cover_id']) ?>">EDITAR SET</a><form method="post" action="<?= url('admin/fotos/estado') ?>"><input type="hidden" name="_token" value="<?= csrf() ?>"><input type="hidden" name="set_id" value="<?= $s['id'] ?>"><input type="hidden" name="status" value="<?= $s['status'] === 'active' ? 'hidden' : 'active' ?>"><button class="btn btn-toggle"><?= $s['status'] === 'active' ? 'DESHABILITAR' : 'PUBLICAR' ?></button></form></div></td>
                         </tr>
                     <?php endforeach; ?>
