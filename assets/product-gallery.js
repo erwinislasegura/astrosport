@@ -76,6 +76,7 @@
   }
 
   function chooseMode(nextMode,pack=null){
+   form.dataset.activeMode=nextMode;
    if(modeInput)modeInput.value=nextMode;
    if(quantityInput)quantityInput.value=pack?String(pack.quantity):'';
    form.querySelectorAll('[data-purchase-mode]').forEach(node=>{
