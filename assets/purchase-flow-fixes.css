@@ -80,3 +80,11 @@ button.purchase-mode-card:hover,button.purchase-mode-card.active,.purchase-mode-
  .photo-page .editorial-set-buy{gap:16px!important;margin-top:18px!important;padding:20px!important}.photo-page .editorial-set-buy h2{font-size:23px}.photo-page .editorial-set-buy p,.photo-page .editorial-set-buy ul{font-size:11px}
 }
 @media(max-width:380px){.purchase-mode-card{flex-basis:154px}.pack-purchase-panel .available-packs>button{flex-basis:122px!important}.photo-page .editorial-gallery .photo-selector,.photo-page .editorial-gallery .photo-selector.smart-selector{gap:6px!important}.photo-page .photo-pack-toggle{max-width:calc(100% - 12px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
+
+
+/* Desktop footer sizing fix: prevent the legacy full-width button from crushing the help text. */
+@media(min-width:761px){
+ .photo-page .editorial-gallery .pack-purchase-footer{display:grid!important;grid-template-columns:minmax(0,1fr) 290px;align-items:center;min-height:66px;height:auto!important}
+ .photo-page .editorial-gallery .pack-purchase-footer .smart-help{min-width:0;width:auto!important;max-width:none!important;white-space:normal;overflow-wrap:normal;word-break:normal}
+ .photo-page .editorial-gallery .desktop-selection-submit{width:290px!important;min-width:290px!important;max-width:290px!important;min-height:44px!important;height:44px!important;justify-self:end}
+}
