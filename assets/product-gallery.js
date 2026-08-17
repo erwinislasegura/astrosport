@@ -80,6 +80,7 @@
     if(node.tagName==='BUTTON')node.setAttribute('aria-pressed',active?'true':'false');
    });
    form.querySelector('.combo-card')?.classList.toggle('active',nextMode==='pack');
+   form.querySelector('.combo-card')?.setAttribute('aria-pressed',nextMode==='pack'?'true':'false');
    update();
   }
 
@@ -123,11 +124,15 @@
 
   form.querySelectorAll('[data-purchase-mode="individual"]').forEach(button=>button.addEventListener('click',()=>chooseMode('individual')));
   form.querySelectorAll('[data-purchase-mode="set"]').forEach(button=>button.addEventListener('click',()=>chooseMode('set')));
+  form.querySelectorAll('[data-combo-mode]').forEach(button=>button.addEventListener('click',()=>chooseMode('pack',selectedPack()||packs[0]||null)));
   packs.forEach(pack=>pack.node.addEventListener('click',()=>chooseMode('pack',pack)));
   form.querySelectorAll('[data-select-photo]').forEach(button=>button.addEventListener('click',event=>{
    event.preventDefault();event.stopPropagation();
    const check=button.closest('.photo-choice')?.querySelector('.photo-pack-check');
    if(!check)return;
+   const pack=selectedMode()==='pack'?selectedPack():null;
+   const selectedCount=checks.filter(item=>item.checked).length;
+   if(pack&&!check.checked&&selectedCount>=pack.quantity)return;
    check.checked=!check.checked;
    check.dispatchEvent(new Event('change',{bubbles:true}));
   }));
