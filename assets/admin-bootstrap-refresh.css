@@ -1,0 +1,970 @@
+:root {
+  --as-admin-navy: #10233f;
+  --as-admin-navy-soft: #193452;
+  --as-admin-primary: #2563eb;
+  --as-admin-primary-dark: #1d4ed8;
+  --as-admin-teal: #0f9d8f;
+  --as-admin-amber: #f59e0b;
+  --as-admin-danger: #dc3545;
+  --as-admin-bg: #f3f6fa;
+  --as-admin-surface: #ffffff;
+  --as-admin-soft: #f8fafc;
+  --as-admin-text: #17243a;
+  --as-admin-muted: #617087;
+  --as-admin-border: #dce3ed;
+  --as-admin-radius: 9px;
+  --as-admin-shadow: 0 8px 24px rgba(16, 35, 63, .08);
+}
+
+body.admin-shell {
+  background: var(--as-admin-bg) !important;
+  color: var(--as-admin-text) !important;
+  font: 14px/1.55 Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  letter-spacing: 0;
+}
+
+body.admin-shell small,
+body.admin-shell p,
+body.admin-shell label,
+body.admin-shell input,
+body.admin-shell select,
+body.admin-shell textarea,
+body.admin-shell button,
+body.admin-shell a {
+  text-rendering: optimizeLegibility;
+}
+
+.admin-shell main small {
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+}
+
+.admin-shell main label,
+.admin-shell main legend {
+  font-size: 12px !important;
+}
+
+.admin-shell main button {
+  font-size: 12px !important;
+}
+
+/* Navegación principal */
+.admin-shell .sidebar {
+  width: 260px !important;
+  padding: 0 15px 18px !important;
+  background: var(--as-admin-navy) !important;
+  box-shadow: 10px 0 30px rgba(16, 35, 63, .14) !important;
+}
+
+.admin-shell .logo {
+  height: 92px !important;
+  gap: 12px !important;
+  padding: 0 8px !important;
+  border-bottom-color: rgba(255, 255, 255, .12) !important;
+}
+
+.admin-shell .logo img {
+  width: 126px !important;
+  height: 58px !important;
+}
+
+.admin-shell .logo span {
+  padding: 5px 7px !important;
+  border-color: rgba(255, 255, 255, .24) !important;
+  border-radius: 5px !important;
+  color: #bfe7ff !important;
+  font-size: 9px !important;
+  letter-spacing: .1em !important;
+}
+
+.admin-shell .sidebar nav {
+  flex-wrap: nowrap !important;
+  padding: 12px 0 8px !important;
+}
+
+.admin-shell .sidebar nav > small {
+  padding: 17px 12px 7px !important;
+  color: #8ea4bd !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: .11em !important;
+}
+
+.admin-shell .sidebar nav a {
+  min-height: 46px !important;
+  gap: 11px !important;
+  margin: 3px 0 !important;
+  padding: 9px 11px !important;
+  border-radius: 7px !important;
+  color: #d1dbe8 !important;
+  font-size: 13px !important;
+  font-weight: 650 !important;
+  letter-spacing: 0 !important;
+}
+
+.admin-shell .sidebar nav a i {
+  width: 29px !important;
+  height: 29px !important;
+  flex-basis: 29px !important;
+  border-radius: 6px !important;
+  background: rgba(255, 255, 255, .08) !important;
+  color: #86dce1 !important;
+  font-size: 15px !important;
+}
+
+.admin-shell .sidebar nav a:hover {
+  border-color: rgba(255, 255, 255, .12) !important;
+  background: var(--as-admin-navy-soft) !important;
+  color: #fff !important;
+  transform: none !important;
+}
+
+.admin-shell .sidebar nav a.active {
+  border-color: transparent !important;
+  background: var(--as-admin-primary) !important;
+  color: #fff !important;
+  box-shadow: 0 7px 18px rgba(37, 99, 235, .28) !important;
+}
+
+.admin-shell .sidebar nav a.active i {
+  background: rgba(255, 255, 255, .17) !important;
+  color: #fff !important;
+}
+
+.admin-shell .user {
+  grid-template-columns: 42px minmax(0, 1fr) 34px !important;
+  gap: 10px !important;
+  padding: 16px 7px 0 !important;
+}
+
+.admin-shell .user > span {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 7px !important;
+  color: #bfe7ff !important;
+  font-size: 12px !important;
+}
+
+.admin-shell .user strong {
+  overflow: hidden;
+  color: #fff !important;
+  font-size: 12px !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-shell .user small {
+  color: #91a5bd !important;
+  font-size: 11px !important;
+}
+
+.admin-shell .user button {
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 6px !important;
+  font-size: 15px !important;
+}
+
+/* Barra superior y contenido */
+.admin-shell main {
+  min-width: 0;
+  margin-left: 260px !important;
+}
+
+.admin-shell .topbar {
+  min-height: 70px !important;
+  height: 70px !important;
+  padding: 0 clamp(20px, 3vw, 42px) !important;
+  border-color: var(--as-admin-border) !important;
+  background: rgba(255, 255, 255, .97) !important;
+  box-shadow: 0 3px 14px rgba(16, 35, 63, .05) !important;
+}
+
+.admin-shell .topbar-path {
+  gap: 9px !important;
+  color: var(--as-admin-muted) !important;
+  font-size: 11px !important;
+  letter-spacing: .045em !important;
+}
+
+.admin-shell .topbar-path b {
+  color: var(--as-admin-text) !important;
+  font-size: 13px !important;
+}
+
+.admin-shell .system-status,
+.admin-shell .top-actions a {
+  font-size: 11px !important;
+}
+
+.admin-shell .top-actions a {
+  min-height: 40px !important;
+  border-radius: 7px !important;
+}
+
+.admin-shell .content {
+  max-width: 1680px !important;
+  padding: 34px clamp(22px, 3vw, 46px) 64px !important;
+}
+
+.admin-shell .title {
+  margin-bottom: 26px !important;
+}
+
+.admin-shell .title h1 {
+  margin: 6px 0 7px !important;
+  color: var(--as-admin-navy) !important;
+  font-size: clamp(36px, 3vw, 48px) !important;
+  line-height: 1 !important;
+}
+
+.admin-shell .title h1 em {
+  color: var(--as-admin-primary) !important;
+  font-style: normal;
+}
+
+.admin-shell .title p {
+  color: var(--as-admin-muted) !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+}
+
+.admin-shell .eyebrow {
+  color: var(--as-admin-primary) !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: .11em !important;
+}
+
+.admin-shell .eyebrow::before {
+  background: var(--as-admin-teal) !important;
+}
+
+/* Superficies y jerarquía */
+.admin-shell .panel,
+.admin-shell .card,
+.admin-shell .module-panel,
+.admin-shell .users-panel,
+.admin-shell .roles-panel,
+.admin-shell .flow-settings-form,
+.admin-shell .gateway-guide,
+.admin-shell .hero-form,
+.admin-shell .hero-admin-preview,
+.admin-shell .cta-form,
+.admin-shell .cta-preview,
+.admin-shell .kpis article {
+  border: 1px solid var(--as-admin-border) !important;
+  border-radius: var(--as-admin-radius) !important;
+  background: var(--as-admin-surface) !important;
+  box-shadow: var(--as-admin-shadow) !important;
+}
+
+.admin-shell .panel,
+.admin-shell .module-panel {
+  padding: 25px !important;
+}
+
+.admin-shell .panel-head {
+  gap: 16px !important;
+  margin-bottom: 22px !important;
+  padding-bottom: 17px !important;
+  border-color: #e7ecf3 !important;
+}
+
+.admin-shell .panel h2,
+.admin-shell .panel-head h2,
+.admin-shell .gateway-guide h2,
+.admin-shell .admin-modal h2 {
+  margin: 5px 0 !important;
+  color: var(--as-admin-navy) !important;
+  font-size: 25px !important;
+  line-height: 1.12 !important;
+}
+
+.admin-shell .panel-head p,
+.admin-shell .panel p,
+.admin-shell .gateway-guide p {
+  color: var(--as-admin-muted) !important;
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+}
+
+.admin-shell .result-count,
+.admin-shell .badge {
+  padding: 7px 9px !important;
+  border-radius: 5px !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: .045em !important;
+}
+
+/* Formularios Bootstrap y formularios heredados */
+.admin-shell form {
+  --bs-gutter-x: 1rem;
+}
+
+.admin-shell form > label,
+.admin-shell .config label,
+.admin-shell .event-fields > label,
+.admin-shell .two > label,
+.admin-shell .two-fields > label,
+.admin-shell .trust-fields > label,
+.admin-shell .smtp-test label {
+  display: block;
+  color: #34445a !important;
+  font-size: 12px !important;
+  font-weight: 750 !important;
+  letter-spacing: .015em !important;
+}
+
+.admin-shell .form-control,
+.admin-shell .form-select,
+.admin-shell input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+.admin-shell select,
+.admin-shell textarea {
+  width: 100%;
+  min-height: 46px !important;
+  margin-top: 7px;
+  padding: 10px 13px !important;
+  border: 1px solid #c9d3e1 !important;
+  border-radius: 7px !important;
+  background-color: #fff !important;
+  color: var(--as-admin-text) !important;
+  font-size: 14px !important;
+  line-height: 1.35 !important;
+  box-shadow: 0 1px 2px rgba(16, 35, 63, .03) !important;
+}
+
+.admin-shell .form-select,
+.admin-shell select {
+  padding-right: 2.5rem !important;
+}
+
+.admin-shell textarea.form-control,
+.admin-shell textarea {
+  min-height: 112px !important;
+  resize: vertical;
+}
+
+.admin-shell input[type="file"].form-control,
+.admin-shell input[type="file"] {
+  min-height: 46px !important;
+  padding: 8px 10px !important;
+}
+
+.admin-shell .form-control:focus,
+.admin-shell .form-select:focus,
+.admin-shell input:focus,
+.admin-shell select:focus,
+.admin-shell textarea:focus {
+  border-color: var(--as-admin-primary) !important;
+  outline: 0 !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .13) !important;
+}
+
+.admin-shell .form-control::placeholder,
+.admin-shell input::placeholder,
+.admin-shell textarea::placeholder {
+  color: #8a97a9 !important;
+  opacity: 1;
+}
+
+.admin-shell form label > small,
+.admin-shell .help-text,
+.admin-shell .field-help {
+  display: block;
+  margin-top: 6px;
+  color: var(--as-admin-muted) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  line-height: 1.45 !important;
+}
+
+.admin-shell .form-check-input,
+.admin-shell input[type="checkbox"],
+.admin-shell input[type="radio"] {
+  width: 19px;
+  height: 19px;
+  min-height: 19px !important;
+  margin-top: 0;
+  border: 1px solid #9aabbe !important;
+  accent-color: var(--as-admin-primary);
+}
+
+.admin-shell .form-check-input:checked {
+  border-color: var(--as-admin-primary) !important;
+  background-color: var(--as-admin-primary) !important;
+}
+
+.admin-shell .two,
+.admin-shell .two-fields,
+.admin-shell .event-fields,
+.admin-shell .trust-fields {
+  gap: 17px !important;
+}
+
+.admin-shell .flow-settings-form,
+.admin-shell .hero-form,
+.admin-shell .cta-form,
+.admin-shell .category-form,
+.admin-shell .event-form,
+.admin-shell .social-settings-form,
+.admin-shell .admin-modal form {
+  gap: 18px !important;
+}
+
+.admin-shell .switch,
+.admin-shell .switch-row {
+  min-height: 76px !important;
+  gap: 20px !important;
+  padding: 15px 0 !important;
+  border-color: #e7ecf3 !important;
+}
+
+.admin-shell .switch strong,
+.admin-shell .switch-row strong,
+.admin-shell .switch-row b {
+  color: var(--as-admin-text) !important;
+  font-size: 13px !important;
+}
+
+.admin-shell .switch small,
+.admin-shell .switch-row small {
+  color: var(--as-admin-muted) !important;
+  font-size: 11px !important;
+  line-height: 1.4 !important;
+}
+
+.admin-shell .security-note {
+  padding: 16px !important;
+  border: 1px solid #a7d8d3 !important;
+  border-left: 4px solid var(--as-admin-teal) !important;
+  border-radius: 7px !important;
+  background: #eefaf8 !important;
+  color: #145f59 !important;
+  font-size: 12px !important;
+}
+
+/* Botones */
+.admin-shell .btn,
+.admin-shell .admin-primary,
+.admin-shell .btn-primary,
+.admin-shell .btn-secondary,
+.admin-shell .btn-ghost,
+.admin-shell .btn-edit,
+.admin-shell .btn-toggle,
+.admin-shell .btn-danger {
+  min-height: 42px !important;
+  padding: 9px 16px !important;
+  border-radius: 7px !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  letter-spacing: .02em !important;
+  box-shadow: none;
+}
+
+.admin-shell .btn:hover,
+.admin-shell .admin-primary:hover {
+  transform: none !important;
+}
+
+.admin-shell .btn-primary,
+.admin-shell .admin-primary {
+  border-color: var(--as-admin-primary) !important;
+  background: var(--as-admin-primary) !important;
+  color: #fff !important;
+}
+
+.admin-shell .btn-primary:hover,
+.admin-shell .admin-primary:hover {
+  border-color: var(--as-admin-primary-dark) !important;
+  background: var(--as-admin-primary-dark) !important;
+}
+
+.admin-shell .btn-secondary,
+.admin-shell .btn-ghost,
+.admin-shell .btn-edit,
+.admin-shell .btn-toggle {
+  border-color: #c9d3e1 !important;
+  background: #fff !important;
+  color: #34445a !important;
+}
+
+.admin-shell .btn-secondary:hover,
+.admin-shell .btn-ghost:hover,
+.admin-shell .btn-edit:hover,
+.admin-shell .btn-toggle:hover {
+  border-color: var(--as-admin-primary) !important;
+  color: var(--as-admin-primary) !important;
+}
+
+.admin-shell .btn-danger {
+  border-color: #f1b5bb !important;
+  background: #fff7f7 !important;
+  color: var(--as-admin-danger) !important;
+}
+
+/* Tablas y estados */
+.admin-shell .admin-table-wrap,
+.admin-shell .table-wrap {
+  overflow-x: auto !important;
+  border: 1px solid var(--as-admin-border) !important;
+  border-radius: 7px !important;
+  background: #fff;
+}
+
+.admin-shell .table,
+.admin-shell .admin-table,
+.admin-shell .table-wrap table {
+  width: 100%;
+  margin: 0 !important;
+  color: var(--as-admin-text) !important;
+  font-size: 13px !important;
+  vertical-align: middle;
+}
+
+.admin-shell .table > :not(caption) > * > *,
+.admin-shell .admin-table th,
+.admin-shell .admin-table td,
+.admin-shell .table-wrap th,
+.admin-shell .table-wrap td {
+  padding: 14px 15px !important;
+  border-bottom-color: #e5ebf2 !important;
+}
+
+.admin-shell .table thead th,
+.admin-shell .admin-table thead th,
+.admin-shell .table-wrap thead th {
+  background: #edf2f7 !important;
+  color: #445269 !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: .045em !important;
+  white-space: nowrap;
+}
+
+.admin-shell .table tbody tr:last-child td,
+.admin-shell .admin-table tbody tr:last-child td,
+.admin-shell .table-wrap tbody tr:last-child td {
+  border-bottom: 0 !important;
+}
+
+.admin-shell .table tbody tr:hover > *,
+.admin-shell .admin-table tbody tr:hover td,
+.admin-shell .table-wrap tbody tr:hover td {
+  background: #f7faff !important;
+}
+
+.admin-shell .table td small,
+.admin-shell .admin-table td small,
+.admin-shell .table-wrap td small {
+  color: var(--as-admin-muted) !important;
+  font-size: 11px !important;
+}
+
+.admin-shell .table-status {
+  display: inline-flex !important;
+  align-items: center;
+  min-height: 28px !important;
+  border: 1px solid #a7d8d3 !important;
+  border-radius: 5px !important;
+  background: #eefaf8 !important;
+  color: #08776d !important;
+  font-size: 10px !important;
+}
+
+.admin-shell .table-status.hidden,
+.admin-shell .gateway-state.offline {
+  border-color: #d7dee8 !important;
+  background: #f4f6f8 !important;
+  color: #69778a !important;
+}
+
+.admin-shell .table-actions {
+  gap: 8px !important;
+}
+
+/* Alertas, filtros y pasarelas */
+.admin-shell .flash,
+.admin-shell .alert {
+  margin-bottom: 22px !important;
+  padding: 15px 17px !important;
+  border-radius: 7px !important;
+  font-size: 13px !important;
+  font-weight: 650 !important;
+}
+
+.admin-shell .module-filters {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 8px !important;
+  margin-bottom: 20px !important;
+}
+
+.admin-shell .module-filters a,
+.admin-shell .tabs button {
+  min-height: 39px !important;
+  padding: 9px 14px !important;
+  border: 1px solid #cdd6e2 !important;
+  border-radius: 6px !important;
+  background: #fff !important;
+  color: #445269 !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+}
+
+.admin-shell .module-filters a:hover,
+.admin-shell .module-filters a.active,
+.admin-shell .tabs button.active {
+  border-color: var(--as-admin-primary) !important;
+  background: var(--as-admin-primary) !important;
+  color: #fff !important;
+}
+
+.admin-shell .gateway-head {
+  gap: 14px !important;
+  padding-bottom: 18px !important;
+  border-bottom: 1px solid #e7ecf3 !important;
+}
+
+.admin-shell .gateway-head > span {
+  width: 46px !important;
+  height: 46px !important;
+  border-radius: 7px !important;
+  background: var(--as-admin-primary) !important;
+  color: #fff !important;
+  font-size: 19px !important;
+}
+
+.admin-shell .gateway-head h2 {
+  font-size: 23px !important;
+}
+
+.admin-shell .gateway-head p,
+.admin-shell .gateway-guide div b,
+.admin-shell .gateway-guide div strong,
+.admin-shell .gateway-guide article,
+.admin-shell .gateway-warning {
+  font-size: 12px !important;
+}
+
+.admin-shell .gateway-state {
+  border-radius: 5px !important;
+  font-size: 10px !important;
+}
+
+/* Métricas y dashboard */
+.admin-shell .kpis {
+  gap: 18px !important;
+}
+
+.admin-shell .kpis article {
+  min-height: 160px !important;
+  padding: 22px !important;
+}
+
+.admin-shell .kpis article > strong {
+  color: var(--as-admin-navy) !important;
+  font-size: 37px !important;
+}
+
+.admin-shell .kpi-top,
+.admin-shell .kpi-foot,
+.admin-shell .kpi-foot small,
+.admin-shell .quick a,
+.admin-shell .activity small,
+.admin-shell .dashboard-grid small {
+  font-size: 12px !important;
+}
+
+.admin-shell .date-filter span,
+.admin-shell .kpi-top > span,
+.admin-shell .kpis article > p,
+.admin-shell .goal small,
+.admin-shell .panel-head > a,
+.admin-shell .chart-summary small,
+.admin-shell .chart-summary > span,
+.admin-shell .axis,
+.admin-shell .chart-labels,
+.admin-shell .storage-ring span,
+.admin-shell .storage-total span,
+.admin-shell .storage-list div,
+.admin-shell .storage-alert b,
+.admin-shell .storage-alert span,
+.admin-shell .event-row > div b,
+.admin-shell .event-row small,
+.admin-shell .status,
+.admin-shell .quick > a b,
+.admin-shell .quick > a small {
+  font-size: 11px !important;
+}
+
+.admin-shell .kpi-top i {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 7px !important;
+  font-size: 16px !important;
+}
+
+.admin-shell .quick {
+  border-radius: var(--as-admin-radius) !important;
+  background: var(--as-admin-navy) !important;
+}
+
+.admin-shell .quick > a {
+  border-radius: 7px !important;
+}
+
+/* Fotografías y carga */
+.admin-shell .upload-grid {
+  gap: 24px !important;
+}
+
+.admin-shell .upload-head {
+  min-height: 80px !important;
+  padding: 18px 21px !important;
+  background: #f5f8fb !important;
+}
+
+.admin-shell .upload-head > b {
+  width: 39px !important;
+  height: 39px !important;
+  border-radius: 7px !important;
+  background: var(--as-admin-primary) !important;
+  font-size: 12px !important;
+}
+
+.admin-shell .upload-head h2 {
+  font-size: 20px !important;
+}
+
+.admin-shell .upload-head p,
+.admin-shell .upload-head em,
+.admin-shell .drop p,
+.admin-shell .drop small,
+.admin-shell .queue small,
+.admin-shell .set-photo-manager small {
+  font-size: 12px !important;
+}
+
+.admin-shell .drop {
+  min-height: 340px !important;
+  border-radius: 8px !important;
+  background: #f7faff !important;
+}
+
+.admin-shell .drop > i {
+  border-radius: 8px !important;
+  color: var(--as-admin-primary) !important;
+}
+
+.admin-shell .drop h3 {
+  font-size: 22px !important;
+}
+
+.admin-shell .drop strong,
+.admin-shell .event-file-button {
+  border-radius: 7px !important;
+  background: var(--as-admin-navy) !important;
+  font-size: 12px !important;
+}
+
+.admin-shell .event-editor-head > a,
+.admin-shell .event-cover-preview span,
+.admin-shell .event-cover-editor > div:last-child > b,
+.admin-shell .event-remove-cover,
+.admin-shell .event-fields label,
+.admin-shell .event-set-picker-head > b,
+.admin-shell .event-set-image i,
+.admin-shell .event-set-copy small,
+.admin-shell .event-set-copy em,
+.admin-shell .event-set-state,
+.admin-shell .event-cover > span,
+.admin-shell .event-status,
+.admin-shell .event-info > small,
+.admin-shell .event-info > div b,
+.admin-shell .category-form label {
+  font-size: 11px !important;
+}
+
+.admin-shell .publish {
+  padding: 18px 22px !important;
+  border-radius: var(--as-admin-radius) !important;
+  font-size: 13px !important;
+}
+
+.admin-shell .publish small {
+  font-size: 11px !important;
+}
+
+/* Usuarios, redes y modales */
+.admin-shell .users-kpis article strong,
+.admin-shell .social-summary strong {
+  font-size: 28px !important;
+}
+
+.admin-shell .users-kpis article span,
+.admin-shell .social-summary span,
+.admin-shell .user-row,
+.admin-shell .role-card,
+.admin-shell .social-network-card,
+.admin-shell .social-settings-form p,
+.admin-shell .social-settings-form small {
+  font-size: 12px !important;
+}
+
+.admin-shell .social-module-state,
+.admin-shell .social-master-card b,
+.admin-shell .social-network-card header b,
+.admin-shell .whatsapp-admin-card header b,
+.admin-shell .social-master-card small,
+.admin-shell .social-network-card header small,
+.admin-shell .whatsapp-admin-card header small,
+.admin-shell .social-card-number,
+.admin-shell .social-toggle,
+.admin-shell .social-toggle.compact span,
+.admin-shell .social-network-card > header em,
+.admin-shell .social-network-row > label b,
+.admin-shell .social-network-row > label small,
+.admin-shell .whatsapp-config-grid label > small,
+.admin-shell .whatsapp-config-grid legend,
+.admin-shell .whatsapp-config-grid fieldset label,
+.admin-shell .whatsapp-admin-preview > span,
+.admin-shell .whatsapp-admin-preview strong,
+.admin-shell .social-save-bar span b,
+.admin-shell .social-save-bar span small,
+.admin-shell .social-save-bar button {
+  font-size: 11px !important;
+}
+
+.admin-shell .admin-modal > div,
+.admin-shell .admin-modal > section {
+  border-radius: 10px !important;
+}
+
+.admin-shell .modal-close {
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 6px !important;
+  font-size: 20px !important;
+}
+
+/* Adaptación a pantallas medianas y móviles */
+@media (max-width: 1180px) {
+  .admin-shell .kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .admin-shell .upload-grid,
+  .admin-shell .flow-admin-grid,
+  .admin-shell .hero-admin-grid,
+  .admin-shell .cta-admin-grid,
+  .admin-shell .category-admin-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .admin-shell .sidebar {
+    width: min(286px, 88vw) !important;
+  }
+
+  .admin-shell main {
+    margin-left: 0 !important;
+  }
+
+  .admin-shell .topbar-path button {
+    display: inline-grid !important;
+    place-items: center;
+  }
+
+  .admin-shell .topbar-path > span,
+  .admin-shell .topbar-path > i {
+    display: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  body.admin-shell {
+    font-size: 13px !important;
+  }
+
+  .admin-shell .topbar {
+    height: 64px !important;
+    min-height: 64px !important;
+    padding: 0 15px !important;
+  }
+
+  .admin-shell .system-status {
+    display: none !important;
+  }
+
+  .admin-shell .top-actions a {
+    min-height: 38px !important;
+    padding: 8px 10px !important;
+  }
+
+  .admin-shell .content {
+    padding: 24px 14px 42px !important;
+  }
+
+  .admin-shell .title {
+    align-items: flex-start !important;
+  }
+
+  .admin-shell .title h1 {
+    font-size: 36px !important;
+  }
+
+  .admin-shell .title p {
+    font-size: 13px !important;
+  }
+
+  .admin-shell .panel,
+  .admin-shell .module-panel {
+    padding: 18px !important;
+  }
+
+  .admin-shell .panel-head {
+    align-items: flex-start !important;
+  }
+
+  .admin-shell .panel h2,
+  .admin-shell .panel-head h2,
+  .admin-shell .gateway-guide h2,
+  .admin-shell .admin-modal h2 {
+    font-size: 22px !important;
+  }
+
+  .admin-shell .kpis {
+    grid-template-columns: 1fr !important;
+  }
+
+  .admin-shell .two,
+  .admin-shell .two-fields,
+  .admin-shell .event-fields,
+  .admin-shell .trust-fields {
+    grid-template-columns: 1fr !important;
+  }
+
+  .admin-shell .table > :not(caption) > * > *,
+  .admin-shell .admin-table th,
+  .admin-shell .admin-table td,
+  .admin-shell .table-wrap th,
+  .admin-shell .table-wrap td {
+    padding: 12px !important;
+  }
+
+  .admin-shell .form-control,
+  .admin-shell .form-select,
+  .admin-shell input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  .admin-shell select,
+  .admin-shell textarea {
+    font-size: 16px !important;
+  }
+
+  .admin-shell .publish {
+    gap: 12px !important;
+  }
+}

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title><?= htmlspecialchars($pageTitle ?? 'Panel') ?> | AstroSport Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="<?= url('assets/admin-dashboard.css') ?>">
     <?php if ($section === 'photos'): ?>
         <link rel="stylesheet" href="<?= url('assets/admin-upload.css') ?>">
@@ -45,15 +46,16 @@
     <link rel="stylesheet" href="<?= url('assets/admin-mobile.css') ?>">
     <link rel="stylesheet" href="<?= url('assets/astrosport-theme.css') ?>">
     <link rel="stylesheet" href="<?= url('assets/admin-system.css') ?>">
+    <link rel="stylesheet" href="<?= url('assets/admin-bootstrap-refresh.css') ?>">
 </head>
 <body class="admin-shell admin-section-<?= htmlspecialchars($section ?: 'dashboard') ?>">
-    <aside class="sidebar" id="sidebar" aria-label="Navegación del panel">
+    <aside class="sidebar d-flex flex-column" id="sidebar" aria-label="Navegación del panel">
         <button class="sidebar-close" id="sidebarClose" type="button" aria-label="Cerrar menú">×</button>
         <a class="logo" href="<?= url() ?>">
             <img src="<?= url('assets/astrosport-logo.png') ?>" alt="AstroSport">
             <span>ADMINISTRACIÓN</span>
         </a>
-        <nav>
+        <nav class="nav flex-column">
             <small>GESTIÓN</small>
             <a class="<?= $section === 'dashboard' ? 'active' : '' ?>" href="<?= url('admin') ?>"><i>▦</i> Resumen</a>
             <a class="<?= $section === 'events' ? 'active' : '' ?>" href="<?= url('admin/eventos') ?>"><i>◫</i> Eventos</a>
@@ -86,14 +88,14 @@
     <button class="admin-nav-overlay" id="adminNavOverlay" type="button" aria-label="Cerrar menú"></button>
 
     <main>
-        <header class="topbar">
+        <header class="topbar navbar">
             <div class="topbar-path">
                 <button id="menuBtn" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Abrir menú">☰</button>
                 <span>ASTROSPORT WORKSPACE</span>
                 <i>/</i>
                 <b><?= htmlspecialchars($pageTitle ?? 'Resumen') ?></b>
             </div>
-            <div class="top-actions">
+            <div class="top-actions d-flex align-items-center">
                 <span class="system-status"><i></i> Sistema activo</span>
                 <a href="<?= url() ?>" target="_blank" rel="noopener">VER TIENDA ↗</a>
             </div>
@@ -101,7 +103,9 @@
         <?php require $view; ?>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="<?= url('assets/admin-shell.js') ?>"></script>
+    <script src="<?= url('assets/admin-bootstrap.js') ?>"></script>
     <?php if ($section === 'dashboard'): ?>
         <script src="<?= url('assets/admin-dashboard.js') ?>"></script>
     <?php endif; ?>
