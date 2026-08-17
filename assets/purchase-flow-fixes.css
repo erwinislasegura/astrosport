@@ -16,3 +16,8 @@
 .pack-purchase-footer{gap:16px;margin-top:9px;padding:10px 12px}.pack-purchase-footer button{min-width:250px;min-height:40px}
 @media(max-width:760px){.purchase-mode-card{min-height:82px}}
 @media(max-width:700px){.pack-purchase-panel .available-packs>button{flex:0 0 145px}.pack-purchase-footer button{width:100%;min-width:0}}
+
+/* Keep the primary action visible before the photo grid. */
+.smart-photo-selection{display:flex!important;flex-direction:column}
+.smart-photo-selection>.pack-purchase-footer{order:1}
+.smart-photo-selection>.photo-selector{order:2}
