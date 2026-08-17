@@ -21,3 +21,8 @@
 .smart-photo-selection{display:flex!important;flex-direction:column}
 .smart-photo-selection>.pack-purchase-footer{order:1}
 .smart-photo-selection>.photo-selector{order:2}
+
+/* Override legacy rule that hid the checkout action in the editorial gallery. */
+.editorial-gallery .pack-purchase-footer{display:flex!important}
+.editorial-gallery .desktop-selection-submit{display:block!important;visibility:visible!important;opacity:1}
+.editorial-gallery .desktop-selection-submit:disabled{display:block!important;opacity:.5}
