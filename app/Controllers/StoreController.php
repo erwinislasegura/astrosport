@@ -13,8 +13,10 @@ final class StoreController
     public function index(): void
     {
         $db = Database::db();
+        $this->ensureHeroMediaFields($db);
         Category::ensureSchema();
         $categories = Category::all(true);
+        $this->upgradeLegacyCta($db);
         $cta = $db->query("SELECT * FROM homepage_cta WHERE id=1 AND active=1")->fetch() ?: null;
         $hero = null;
         try {
@@ -184,6 +186,32 @@ final class StoreController
             ];
         } catch (Throwable $e) {
             return ['MIN(p.id)', 'p.set_id,p.id'];
+        }
+    }
+
+    private function ensureHeroMediaFields(\PDO $db): void
+    {
+        try {
+            $columns = $db->query('SHOW COLUMNS FROM homepage_hero')->fetchAll(\PDO::FETCH_COLUMN);
+            if (!in_array('media_type', $columns, true)) {
+                $db->exec("ALTER TABLE homepage_hero ADD media_type VARCHAR(20) NOT NULL DEFAULT 'youtube' AFTER button_text");
+            }
+            if (!in_array('video_url', $columns, true)) {
+                $db->exec("ALTER TABLE homepage_hero ADD video_url VARCHAR(500) NULL AFTER media_type");
+            }
+            $db->exec("UPDATE homepage_hero SET video_url='https://www.youtube.com/watch?v=1MieluM0c6c' WHERE media_type='youtube' AND (video_url IS NULL OR video_url='')");
+        } catch (Throwable $exception) {
+            error_log('Hero schema: '.$exception->getMessage());
+        }
+    }
+
+    private function upgradeLegacyCta(\PDO $db): void
+    {
+        try {
+            $statement = $db->prepare("UPDATE homepage_cta SET event_id=NULL,eyebrow=?,title=?,description='',button_text=?,button_url=?,active=1 WHERE id=1 AND title='TRAIL VOLCÁN ANTUCO 2026'");
+            $statement->execute(['Para clubes y organizaciones', '¿Necesitas cobertura para tu evento?', 'Solicitar propuesta', 'mailto:contacto@astrosport.cl']);
+        } catch (Throwable $exception) {
+            error_log('CTA migration: '.$exception->getMessage());
         }
     }
 }

@@ -14,6 +14,7 @@ final class CtaController
     public function index(): void
     {
         $db = Database::db();
+        $this->upgradeLegacyCta($db);
         $cta = $db->query('SELECT * FROM homepage_cta WHERE id=1')->fetch() ?: [];
         $events = $db->query('SELECT id,name,event_date FROM events ORDER BY event_date DESC')->fetchAll();
 
@@ -34,6 +35,16 @@ final class CtaController
         $newImage = null;
 
         try {
+            $eyebrow = trim((string)($_POST['eyebrow'] ?? ''));
+            $title = trim((string)($_POST['title'] ?? ''));
+            $buttonText = trim((string)($_POST['button_text'] ?? ''));
+            $buttonUrl = trim((string)($_POST['button_url'] ?? ''));
+            if ($eyebrow === '' || $title === '' || $buttonText === '' || $buttonUrl === '') {
+                throw new RuntimeException('Completa la etiqueta, título, texto y enlace del botón.');
+            }
+            if (!preg_match('~^(?:https?://|mailto:|tel:|/|#)~i', $buttonUrl)) {
+                throw new RuntimeException('El enlace debe comenzar con https://, mailto:, tel:, / o #.');
+            }
             [$imagePath, $newImage] = $this->storeImage($_FILES['cta_image'] ?? [], $currentImage);
 
             $statement = $db->prepare(
@@ -46,11 +57,11 @@ final class CtaController
             );
             $statement->execute([
                 (int)($_POST['event_id'] ?? 0) ?: null,
-                trim((string)($_POST['eyebrow'] ?? '')),
-                trim((string)($_POST['title'] ?? '')),
+                $eyebrow,
+                $title,
                 trim((string)($_POST['description'] ?? '')),
-                trim((string)($_POST['button_text'] ?? '')),
-                trim((string)($_POST['button_url'] ?? '')),
+                $buttonText,
+                $buttonUrl,
                 $imagePath,
                 isset($_POST['active']) ? 1 : 0,
             ]);
@@ -128,5 +139,11 @@ final class CtaController
         if (is_file($file)) {
             @unlink($file);
         }
+    }
+
+    private function upgradeLegacyCta(\PDO $db): void
+    {
+        $statement = $db->prepare("UPDATE homepage_cta SET event_id=NULL,eyebrow=?,title=?,description='',button_text=?,button_url=?,active=1 WHERE id=1 AND title='TRAIL VOLCÁN ANTUCO 2026'");
+        $statement->execute(['Para clubes y organizaciones', '¿Necesitas cobertura para tu evento?', 'Solicitar propuesta', 'mailto:contacto@astrosport.cl']);
     }
 }

@@ -1,28 +1,15 @@
-(function () {
-    const input = document.getElementById('ctaImageInput');
-    const preview = document.getElementById('ctaPreview');
-    const filename = document.getElementById('ctaImageName');
-    let temporaryUrl = '';
+const ctaForm = document.getElementById('ctaForm');
+const ctaPreview = document.getElementById('ctaPreview');
 
-    if (!input || !preview) return;
-
-    input.addEventListener('change', function () {
-        const file = input.files && input.files[0];
-        if (!file) return;
-
-        if (!file.type.startsWith('image/')) {
-            input.value = '';
-            if (filename) filename.textContent = 'Selecciona un archivo de imagen válido.';
-            return;
-        }
-
-        if (temporaryUrl) URL.revokeObjectURL(temporaryUrl);
-        temporaryUrl = URL.createObjectURL(file);
-        preview.style.backgroundImage = `linear-gradient(90deg,#080b0ce8,#080b0c55),url("${temporaryUrl}")`;
-        if (filename) filename.textContent = file.name;
+function updateCtaPreview() {
+    if (!ctaForm || !ctaPreview) return;
+    const data = new FormData(ctaForm);
+    ctaPreview.querySelectorAll('[data-cta-preview]').forEach((node) => {
+        node.textContent = String(data.get(node.dataset.ctaPreview) || '');
     });
+    ctaPreview.classList.toggle('is-disabled', !ctaForm.elements.active.checked);
+}
 
-    window.addEventListener('pagehide', function () {
-        if (temporaryUrl) URL.revokeObjectURL(temporaryUrl);
-    });
-})();
+ctaForm?.addEventListener('input', updateCtaPreview);
+ctaForm?.addEventListener('change', updateCtaPreview);
+updateCtaPreview();

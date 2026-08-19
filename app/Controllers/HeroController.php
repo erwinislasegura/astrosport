@@ -5,8 +5,22 @@ use App\Core\Database;
 
 final class HeroController
 {
+    private function ensureMediaFields(): void
+    {
+        $db = Database::db();
+        $columns = $db->query('SHOW COLUMNS FROM homepage_hero')->fetchAll(\PDO::FETCH_COLUMN);
+        if (!in_array('media_type', $columns, true)) {
+            $db->exec("ALTER TABLE homepage_hero ADD media_type VARCHAR(20) NOT NULL DEFAULT 'youtube' AFTER button_text");
+        }
+        if (!in_array('video_url', $columns, true)) {
+            $db->exec("ALTER TABLE homepage_hero ADD video_url VARCHAR(500) NULL AFTER media_type");
+        }
+        $db->exec("UPDATE homepage_hero SET video_url='https://www.youtube.com/watch?v=1MieluM0c6c' WHERE media_type='youtube' AND (video_url IS NULL OR video_url='')");
+    }
+
     public function index(): void
     {
+        $this->ensureMediaFields();
         $hero = Database::db()->query('SELECT * FROM homepage_hero WHERE id=1')->fetch() ?: [];
         admin_view('admin/hero', [
             'hero' => $hero,
@@ -18,6 +32,7 @@ final class HeroController
     public function save(): never
     {
         verify_csrf();
+        $this->ensureMediaFields();
         $current = Database::db()->query('SELECT search_placeholder,button_text FROM homepage_hero WHERE id=1')->fetch() ?: [];
         $title = trim($_POST['title'] ?? '');
         $highlight = trim($_POST['highlight'] ?? '');
@@ -55,11 +70,17 @@ final class HeroController
         $positions = ['center center', 'center top', 'center bottom', 'left center', 'right center'];
         $position = in_array($_POST['background_position'] ?? '', $positions, true) ? $_POST['background_position'] : 'center center';
         $opacity = max(20, min(95, (int)($_POST['overlay_opacity'] ?? 75)));
-        $sql = "INSERT INTO homepage_hero(id,eyebrow,title,highlight,description,search_placeholder,button_text,background_url,background_position,overlay_opacity,trust_one,trust_two,trust_three) VALUES(1,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE eyebrow=VALUES(eyebrow),title=VALUES(title),highlight=VALUES(highlight),description=VALUES(description),search_placeholder=VALUES(search_placeholder),button_text=VALUES(button_text),background_url=VALUES(background_url),background_position=VALUES(background_position),overlay_opacity=VALUES(overlay_opacity),trust_one=VALUES(trust_one),trust_two=VALUES(trust_two),trust_three=VALUES(trust_three)";
+        $mediaType = in_array($_POST['media_type'] ?? '', ['image', 'local_video', 'youtube'], true) ? $_POST['media_type'] : 'image';
+        $videoUrl = trim($_POST['video_url'] ?? '');
+        if ($mediaType === 'youtube' && $videoUrl === '') {
+            $_SESSION['error'] = 'Ingresa la URL del video de YouTube.';
+            redirect('/admin/hero');
+        }
+        $sql = "INSERT INTO homepage_hero(id,eyebrow,title,highlight,description,search_placeholder,button_text,media_type,video_url,background_url,background_position,overlay_opacity,trust_one,trust_two,trust_three) VALUES(1,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE eyebrow=VALUES(eyebrow),title=VALUES(title),highlight=VALUES(highlight),description=VALUES(description),search_placeholder=VALUES(search_placeholder),button_text=VALUES(button_text),media_type=VALUES(media_type),video_url=VALUES(video_url),background_url=VALUES(background_url),background_position=VALUES(background_position),overlay_opacity=VALUES(overlay_opacity),trust_one=VALUES(trust_one),trust_two=VALUES(trust_two),trust_three=VALUES(trust_three)";
         Database::db()->prepare($sql)->execute([
             trim($_POST['eyebrow'] ?? ''), $title, $highlight,
-            trim($_POST['description'] ?? ''), (string)($current['search_placeholder'] ?? ''),
-            (string)($current['button_text'] ?? ''), $background, $position, $opacity,
+            trim($_POST['description'] ?? ''), trim($_POST['search_placeholder'] ?? (string)($current['search_placeholder'] ?? '')),
+            trim($_POST['button_text'] ?? (string)($current['button_text'] ?? '')), $mediaType, $videoUrl, $background, $position, $opacity,
             trim($_POST['trust_one'] ?? ''), trim($_POST['trust_two'] ?? ''), trim($_POST['trust_three'] ?? ''),
         ]);
         $_SESSION['success'] = 'Hero actualizado correctamente.';

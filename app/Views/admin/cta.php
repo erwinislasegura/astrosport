@@ -1,89 +1,37 @@
 <?php
-$storedImage = trim((string)($cta['image_url'] ?? ''));
-$previewImage = $storedImage !== ''
-    ? media($storedImage)
-    : 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=1200&q=85';
+$cta = array_merge([
+    'eyebrow' => 'Para clubes y organizaciones',
+    'title' => '¿Necesitas cobertura para tu evento?',
+    'description' => '',
+    'button_text' => 'Solicitar propuesta',
+    'button_url' => 'mailto:contacto@astrosport.cl',
+    'active' => 1,
+], is_array($cta ?? null) ? $cta : []);
 ?>
 <div class="content cta-admin-content">
     <section class="title">
-        <div>
-            <span class="eyebrow">PORTADA</span>
-            <h1>CTA DE <em>EVENTO.</em></h1>
-            <p>Configura el llamado destacado que aparecerá en la página principal.</p>
-        </div>
+        <div><span class="eyebrow">PORTADA</span><h1>CTA de contacto</h1><p>Administra la franja para solicitar cobertura fotográfica de eventos.</p></div>
+        <a class="btn btn-secondary" href="<?= url() ?>" target="_blank" rel="noopener">VER PORTADA ↗</a>
     </section>
-
-    <?php if (!empty($_SESSION['success'])): ?>
-        <div class="flash success"><?= htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?></div>
-    <?php endif; ?>
-    <?php if (!empty($_SESSION['error'])): ?>
-        <div class="flash error"><?= htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?></div>
-    <?php endif; ?>
-
-    <div class="cta-admin-grid">
-        <form class="panel cta-form" method="post" enctype="multipart/form-data">
+    <?php if (!empty($_SESSION['success'])): ?><div class="flash success"><?= htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?></div><?php endif; ?>
+    <?php if (!empty($_SESSION['error'])): ?><div class="flash error"><?= htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?></div><?php endif; ?>
+    <div class="cta-admin-grid cta-contact-admin">
+        <form class="panel cta-form" method="post" id="ctaForm">
             <input type="hidden" name="_token" value="<?= csrf() ?>">
-
-            <label class="switch-row">
-                <span>
-                    <b>MOSTRAR CTA EN PORTADA</b>
-                    <small>Permite activar o desactivar la sección.</small>
-                </span>
-                <input type="checkbox" name="active" <?= !empty($cta['active']) ? 'checked' : '' ?>>
-            </label>
-
-            <label>EVENTO RELACIONADO
-                <select name="event_id">
-                    <option value="">Sin evento</option>
-                    <?php foreach ($events as $event): ?>
-                        <option value="<?= (int)$event['id'] ?>" <?= ($cta['event_id'] ?? '') == $event['id'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($event['name']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </label>
-
-            <label>ETIQUETA
-                <input name="eyebrow" value="<?= htmlspecialchars($cta['eyebrow'] ?? 'EVENTO DESTACADO') ?>">
-            </label>
-            <label>TÍTULO
-                <input name="title" value="<?= htmlspecialchars($cta['title'] ?? 'TRAIL VOLCÁN ANTUCO 2026') ?>">
-            </label>
-            <label>DESCRIPCIÓN
-                <textarea name="description"><?= htmlspecialchars($cta['description'] ?? 'Encuentra todas las fotografías oficiales del evento.') ?></textarea>
-            </label>
-
+            <label class="switch-row"><span><b>MOSTRAR CTA EN PORTADA</b><small>Activa o desactiva completamente esta franja.</small></span><input type="checkbox" name="active" <?= !empty($cta['active']) ? 'checked' : '' ?>></label>
+            <label>ETIQUETA SUPERIOR<input name="eyebrow" maxlength="100" required value="<?= htmlspecialchars($cta['eyebrow']) ?>"></label>
+            <label>TÍTULO PRINCIPAL<input name="title" maxlength="180" required value="<?= htmlspecialchars($cta['title']) ?>"></label>
             <div class="two-fields">
-                <label>TEXTO DEL BOTÓN
-                    <input name="button_text" value="<?= htmlspecialchars($cta['button_text'] ?? 'VER FOTOGRAFÍAS') ?>">
-                </label>
-                <label>ENLACE DEL BOTÓN
-                    <input name="button_url" value="<?= htmlspecialchars($cta['button_url'] ?? '#fotos') ?>">
-                </label>
+                <label>TEXTO DEL BOTÓN<input name="button_text" maxlength="80" required value="<?= htmlspecialchars($cta['button_text']) ?>"></label>
+                <label>ENLACE DEL BOTÓN<input name="button_url" maxlength="255" required value="<?= htmlspecialchars($cta['button_url']) ?>"><small>Admite una página, correo con mailto: o enlace externo.</small></label>
             </div>
-
-            <label class="cta-image-field" for="ctaImageInput">
-                <span>IMAGEN DE FONDO</span>
-                <input id="ctaImageInput" name="cta_image" type="file" accept="image/jpeg,image/png,image/webp">
-                <small id="ctaImageName">
-                    <?= $storedImage !== '' ? 'Imagen actual cargada. Selecciona otra para reemplazarla.' : 'Selecciona una imagen desde tu dispositivo.' ?>
-                </small>
-                <em>JPG, PNG o WebP · máximo 10 MB · recomendado 1800 × 900 px</em>
-            </label>
-
+            <input type="hidden" name="description" value="">
             <button type="submit">GUARDAR CTA →</button>
         </form>
-
-        <aside
-            class="cta-preview"
-            id="ctaPreview"
-            style="background-image:linear-gradient(90deg,#080b0ce8,#080b0c55),url('<?= htmlspecialchars($previewImage) ?>')"
-        >
-            <small class="cta-preview-label">VISTA PREVIA</small>
-            <span><?= htmlspecialchars($cta['eyebrow'] ?? 'EVENTO DESTACADO') ?></span>
-            <h2><?= htmlspecialchars($cta['title'] ?? 'TRAIL VOLCÁN ANTUCO 2026') ?></h2>
-            <p><?= htmlspecialchars($cta['description'] ?? 'Encuentra todas las fotografías oficiales del evento.') ?></p>
-            <b><?= htmlspecialchars($cta['button_text'] ?? 'VER FOTOGRAFÍAS') ?> →</b>
+        <aside class="cta-contact-preview" id="ctaPreview">
+            <small>VISTA PREVIA EN PORTADA</small>
+            <div><span data-cta-preview="eyebrow"><?= htmlspecialchars($cta['eyebrow']) ?></span><h2 data-cta-preview="title"><?= htmlspecialchars($cta['title']) ?></h2></div>
+            <b><span data-cta-preview="button_text"><?= htmlspecialchars($cta['button_text']) ?></span> →</b>
         </aside>
     </div>
 </div>
